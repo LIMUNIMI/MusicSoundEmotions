@@ -1,6 +1,6 @@
 from sklearn.base import clone
-from sklearn.model_validation import StratifiedKFold
-from sklearn.metrics import get_metrics
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import get_scorer
 
 from .splits import DataXy, MixedStratifiedKFold
 
@@ -13,7 +13,7 @@ def cross_validate(
     the separated test folds
     """
 
-    metrics = [get_metrics(m) for m in metrics]
+    metrics = [get_scorer(m) for m in metrics]
 
     metrics_a = []
     metrics_b = []
