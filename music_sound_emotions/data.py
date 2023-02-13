@@ -20,8 +20,22 @@ class DataXy:
         self.n_features = self.X.shape[1]
         self._y_backup = self.y.copy()
 
+        # computing classes
+        self.y_classes_ = np.zeros_like(self.y)
+        # val > 0, aro > 0 -> 1
+        # val < 0, aro > 0 -> 2
+        self.y_classes_[self.y[:, 1] > 0] = 1
+        self.y_classes_[self.y[:, 0] < 0] += 1
+        # val < 0, aro < 0 -> 3
+        # val > 0, aro < 0 -> 4
+        self.y_classes_[self.y[:, 1] < 0] = 3
+        self.y_classes_[self.y[:, 0] > 0] += 1
+
     def set_label(self, label: str):
         self.y = self.y_backup[label]
+
+    def get_classes(self):
+        return self.y_classes_
 
 
 def load_data():

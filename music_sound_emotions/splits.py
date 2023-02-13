@@ -51,8 +51,8 @@ class MixedStratifiedKFold:
         return np.concatenate([arr_a, arr_b])
 
     def _init_split(self):
-        y_a = self.class_inference_from_y(self.data_a.y)
-        y_b = self.class_inference_from_y(self.data_b.y)
+        y_a = self.data_a.get_classes()
+        y_b = self.data_b.get_classes()
         y_a_props = _get_probs_from_class_ratio(y_a)
         y_b_probs = _get_probs_from_class_ratio(y_b)
 
