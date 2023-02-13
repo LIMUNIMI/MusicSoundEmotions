@@ -1,0 +1,38 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Federico Simonetta", email = "fsimonetta@iccmu.es"},
+]
+dependencies = []
+requires-python = ">=3.9, <3.10"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+[tool.pdm.scripts]
+# install_pip = "python -m ensurepip"
+# install_deps = "python -m pip install kaleido==0.2"
+# post_install = {composite = ["install_pip", "install_deps"]}
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "ipdb>=0.13.9",
+]
+[[tool.pdm.source]]
+url = "https://pypi.anaconda.org/intel/simple"
+verify_ssl = true
+name = "intel"
+
+[[tool.pdm.source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[tool.pdm.resolution]
+respect-source-order = true
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
