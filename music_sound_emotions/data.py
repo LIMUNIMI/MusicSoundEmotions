@@ -21,15 +21,17 @@ class DataXy:
         self._y_backup = self.y.copy()
 
         # computing classes
-        self.y_classes_ = np.zeros_like(self.y)
+        self.y_classes_ = np.zeros((self.y.shape[0],), dtype=np.int8)
         # val > 0, aro > 0 -> 1
         # val < 0, aro > 0 -> 2
-        self.y_classes_[self.y[:, 1] > 0] = 1
-        self.y_classes_[self.y[:, 0] < 0] += 1
+        # TODO: fix for numpy arrays
+        # TODO: fix 4.5
+        self.y_classes_[self.y['AroMN'] > 4.5] = 1
+        self.y_classes_[self.y['ValMN'] < 4.5] += 1
         # val < 0, aro < 0 -> 3
         # val > 0, aro < 0 -> 4
-        self.y_classes_[self.y[:, 1] < 0] = 3
-        self.y_classes_[self.y[:, 0] > 0] += 1
+        self.y_classes_[self.y['AroMN'] < 4.5] = 3
+        self.y_classes_[self.y['ValMN'] > 4.5] += 1
 
     def set_label(self, label: str):
         self.y = self.y_backup[label]
@@ -44,7 +46,7 @@ def load_data():
     iads = DataXy(*_merge(iads_x, iads_y))
 
     pmemo_x = load_data_x(S.PMEMO_DIR, S.FEATURE_FILE)
-    pmemo_y = load_pmemo_y(S.PMEMO_DIR)
+    pmemo_y = load_pmemo_y(S.PMEMO_DIR[0])
     pmemo = DataXy(*_merge(pmemo_x, pmemo_y))
 
     return iads, pmemo
@@ -62,9 +64,11 @@ def load_data_x(dirs, fname):
     for dir in dirs:
         filepath = Path(dir) / fname
         out.append(pd.read_csv(filepath, sep=";"))
-    out = pd.concat(out, axis=1)
+    out = pd.concat(out)
     out.rename(columns={"name": "ID"}, inplace=True)
-    out["ID"] = out["ID"].str[:-4]
+    out["ID"] = out["ID"].str[1:-5].astype(str)
+    _2 = out["ID"].str.endswith('_2')
+    out.loc[_2, 'ID'] = out.loc[_2, 'ID'].str[:-2]
     return out
 
 
@@ -72,6 +76,7 @@ def load_iads_y(iads_extended_dir):
     dir = Path(iads_extended_dir)
     df = pd.read_excel(dir / "Sound Ratings.xlsx")
     df.rename(columns={"Sound ID": "ID"}, inplace=True)
+    df['ID'] = df['ID'].astype(str)
     return df[["ID", "AroMN", "AroSD", "ValMN", "ValSD"]]
 
 

@@ -25,13 +25,12 @@ class MixedStratifiedKFold:
     data_b: DataXy
     p: float
     base_splitter: object
-    class_inference_from_y: Callable
     random_state: object
 
     def __post_init__(self):
         self.full_data_ = DataXy(
-            np.concatenate([self.data_a.X, self.data_b.X], axis=1),
-            np.concatenate([self.data_a.y, self.data_b.y], axis=1),
+            np.concatenate([self.data_a.X, self.data_b.X], axis=0),
+            np.concatenate([self.data_a.y, self.data_b.y], axis=0),
         )
         if isinstance(self.random_state, int):
             self.random_state = np.random.default_rng(self.random_state)

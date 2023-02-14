@@ -1,6 +1,6 @@
 from sklearn.base import clone
-from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import get_scorer
+from sklearn.model_selection import StratifiedKFold
 
 from .splits import DataXy, MixedStratifiedKFold
 

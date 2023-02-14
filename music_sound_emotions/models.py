@@ -2,6 +2,7 @@ import autosklearn
 import numpy as np
 from autosklearn.regression import AutoSklearnRegressor
 from sklearn.decomposition import PCA
+from sklearn.experimental import enable_halving_search_cv
 from sklearn.linear_model import ElasticNetCV
 from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.pipeline import Pipeline
