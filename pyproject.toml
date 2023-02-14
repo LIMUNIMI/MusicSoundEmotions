@@ -5,21 +5,22 @@ description = ""
 authors = [
     {name = "Federico Simonetta", email = "fsimonetta@iccmu.es"},
 ]
-dependencies = []
+dependencies = [
+    "auto-sklearn==0.15.0",
+    "fire>=0.5.0",
+]
 requires-python = ">=3.9, <3.10"
 license = {text = "MIT"}
 
 
 [tool.pdm]
 [tool.pdm.scripts]
+experiment = "python -m music_sound_emotions.validation"
 # install_pip = "python -m ensurepip"
 # install_deps = "python -m pip install kaleido==0.2"
 # post_install = {composite = ["install_pip", "install_deps"]}
 
 [tool.pdm.dev-dependencies]
-dev = [
-    "ipdb>=0.13.9",
-]
 [[tool.pdm.source]]
 url = "https://pypi.anaconda.org/intel/simple"
 verify_ssl = true
