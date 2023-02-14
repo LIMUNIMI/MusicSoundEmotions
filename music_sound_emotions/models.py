@@ -1,3 +1,4 @@
+from copy import deepcopy
 import autosklearn
 import numpy as np
 from autosklearn.regression import AutoSklearnRegressor
@@ -8,6 +9,7 @@ from sklearn.model_selection import HalvingGridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
+from sklearn.base import clone
 
 
 def _get_pipeline(classifier):
@@ -16,28 +18,57 @@ def _get_pipeline(classifier):
     )
 
 
-def get_models(splitter):
+def get_best_model(tuner: dict):
+    """
+    Given a tuner (an estimator whose `fit` method tunes the hyper-parameters),
+    returns the best model found, with `fit` which tunes the parameters
+    (not the hyper-parameters).
+
+    If tuner was not fitted, None is returned.
+    """
+
+    m = tuner['model']
+    if isinstance(m, AutoSklearnRegressor):
+        m.fit = m.refit
+        return m
+    elif isinstance(m, HalvingGridSearchCV):
+        params = getattr(m, "best_params_", None)
+        if params is None:
+            return None
+        return clone(m.estimator).set_params(**params)
+    else:
+        raise TypeError(
+            f"Only HalvingGridSearchCV and AutoSklearnRegressor supported, but received {type(m)}."
+        )
+
+
+def get_tuners(splitter) -> list:
+    """
+    Given a splitter, returns a list of estimators whose `fit` methods tunes
+    hyper-parameters of models
+    """
     halving_gridsearch_params = dict(
         factor=2,
-        cv=splitter,
         scoring="neg_root_mean_squared_error",
         random_state=1992,
         refit=False,
         n_jobs=-1,
     )
-    models = [
+    tuners = [
         {
             "name": "Linear",
             "model": HalvingGridSearchCV(
                 estimator=_get_pipeline(
-                    ElasticNetCV(n_alphas=100, max_iter=10000, tol=1e-10, cv=5)
+                    ElasticNetCV(n_alphas=100, max_iter=10**6,
+                                 tol=1e-5, cv=3)
                 ),
                 param_grid=dict(
-                    pca__n_components=np.linspace(0.8, 1.0, 10),
-                    classifier__l1_ratio=np.linspace(0.0, 1.0, 10),
+                    pca__n_components=np.linspace(0.8, 1-1e-15, 10),
+                    classifier__l1_ratio=np.linspace(0.01, 0.99, 10),
                     classifier__normalize=[True, False],
                 ),
-                **halving_gridsearch_params
+                cv=deepcopy(splitter),
+                **halving_gridsearch_params,
             ),
         },
         {
@@ -46,7 +77,7 @@ def get_models(splitter):
                 estimator=_get_pipeline(SVR()),
                 param_grid=[
                     dict(
-                        pca__n_components=np.linspace(0.8, 1.0, 10),
+                        pca__n_components=np.linspace(0.8, 1-1e-15, 10),
                         classifier__kernel=["rbf"],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
@@ -54,7 +85,7 @@ def get_models(splitter):
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                     dict(
-                        pca__n_components=np.linspace(0.8, 1.0, 10),
+                        pca__n_components=np.linspace(0.8, 1-1e-15, 10),
                         classifier__kernel=["sigmoid"],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
@@ -63,7 +94,7 @@ def get_models(splitter):
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                     dict(
-                        pca__n_components=np.linspace(0.8, 1.0, 10),
+                        pca__n_components=np.linspace(0.8, 1-1e-15, 10),
                         classifier__kernel=["poly"],
                         classifier__degree=[2, 3, 4, 5],
                         classifier__gamma=["scale", "auto"],
@@ -72,8 +103,9 @@ def get_models(splitter):
                         classifier__coef0=np.linspace(0.0, 100.0, 10),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
-                ]
-                ** halving_gridsearch_params,
+                ],
+                cv=deepcopy(splitter),
+                **halving_gridsearch_params,
             ),
         },
         {
@@ -85,9 +117,9 @@ def get_models(splitter):
                 memory_limit=10000,
                 ensemble_nbest=10,
                 metric=autosklearn.metrics.mean_squared_error,
-                resampling_strategy=splitter,
+                resampling_strategy=deepcopy(splitter),
             ),
         },
     ]
 
-    return models
+    return tuners

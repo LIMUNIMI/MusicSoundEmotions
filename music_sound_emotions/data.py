@@ -3,6 +3,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.cluster import AgglomerativeClustering
 
 from . import settings as S
 
@@ -11,6 +12,7 @@ from . import settings as S
 class DataXy:
     X: np.ndarray
     y: np.ndarray
+    min_class_cardinality: int = S.N_SPLITS
 
     def __post_init__(self):
         assert (
@@ -21,20 +23,11 @@ class DataXy:
         self._y_backup = self.y.copy()
 
         # computing classes
-        self.y_classes_ = np.zeros((self.y.shape[0],), dtype=np.int8)
-        # val > 0, aro > 0 -> 1
-        # val < 0, aro > 0 -> 2
-        # TODO: fix for numpy arrays
-        # TODO: fix 4.5
-        self.y_classes_[self.y['AroMN'] > 4.5] = 1
-        self.y_classes_[self.y['ValMN'] < 4.5] += 1
-        # val < 0, aro < 0 -> 3
-        # val > 0, aro < 0 -> 4
-        self.y_classes_[self.y['AroMN'] < 4.5] = 3
-        self.y_classes_[self.y['ValMN'] > 4.5] += 1
+        y_ = self.y[["AroMN", "ValMN"]] / 1
+        self.y_classes_ = _cluster(y_, min_cardinality=self.min_class_cardinality)
 
     def set_label(self, label: str):
-        self.y = self.y_backup[label]
+        self.y = self._y_backup[label]
 
     def get_classes(self):
         return self.y_classes_
@@ -56,6 +49,7 @@ def _merge(X, y):
     df = X.merge(y, on="ID")
     X = df[X.columns].drop(columns=["ID"])
     y = df[y.columns].drop(columns=["ID"])
+    y /= 9
     return X, y
 
 
@@ -67,8 +61,8 @@ def load_data_x(dirs, fname):
     out = pd.concat(out)
     out.rename(columns={"name": "ID"}, inplace=True)
     out["ID"] = out["ID"].str[1:-5].astype(str)
-    _2 = out["ID"].str.endswith('_2')
-    out.loc[_2, 'ID'] = out.loc[_2, 'ID'].str[:-2]
+    _2 = out["ID"].str.endswith("_2")
+    out.loc[_2, "ID"] = out.loc[_2, "ID"].str[:-2]
     return out
 
 
@@ -76,7 +70,7 @@ def load_iads_y(iads_extended_dir):
     dir = Path(iads_extended_dir)
     df = pd.read_excel(dir / "Sound Ratings.xlsx")
     df.rename(columns={"Sound ID": "ID"}, inplace=True)
-    df['ID'] = df['ID'].astype(str)
+    df["ID"] = df["ID"].astype(str)
     return df[["ID", "AroMN", "AroSD", "ValMN", "ValSD"]]
 
 
@@ -100,3 +94,38 @@ def load_pmemo_y(pmemo_dir):
     )
     df["ID"] = df["ID"].str[:-4]
     return df[["ID", "AroMN", "AroSD", "ValMN", "ValSD"]]
+
+
+def _cluster(X, metric="euclidean", linkage="ward", min_cardinality=5):
+
+    print("  [Clustering]")
+    assert min_cardinality < X.shape[0]
+
+    K = X.shape[0]
+    # define the agglomerative clustering model
+    model = AgglomerativeClustering(
+        # in sklearn 1.2 affinity -> metric
+        n_clusters=K // min_cardinality,
+        affinity=metric,
+        distance_threshold=None,
+        linkage=linkage,
+    )
+
+    # fit the model to the data
+    model.fit(X)
+
+    # get the cluster labels for each data point
+    labels = model.labels_
+
+    # get the number of clusters
+    t = np.unique(labels, return_counts=True)[1].min()
+
+    # stop the procedure if all clusters have cardinality >= x
+    while t < min_cardinality:
+        # merge the two closest clusters
+        model.n_clusters -= 1
+        labels = model.fit_predict(X)
+        t = np.unique(labels, return_counts=True)[1].min()
+    print("  [Ended]")
+
+    return labels

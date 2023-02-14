@@ -12,3 +12,6 @@ IADSE_DIR = "/datasets/emotions/IADS-E/"
 IADS2_DIR = "/datasets/emotions/IADS-2/"
 IADS_DIR = [IADS2_DIR, IADSE_DIR]
 FEATURE_FILE = "static_features.csv"
+
+# experiments
+N_SPLITS = 5
