@@ -12,7 +12,7 @@ from . import settings as S
 class DataXy:
     X: np.ndarray
     y: np.ndarray
-    min_class_cardinality: int = S.N_SPLITS
+    min_class_cardinality: int = S.N_SPLITS * 2
 
     def __post_init__(self):
         assert (

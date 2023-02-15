@@ -11,6 +11,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from sklearn.base import clone
 
+from . import settings as S
+
 
 def _get_pipeline(classifier):
     return Pipeline(
@@ -48,62 +50,69 @@ def get_tuners(splitter) -> list:
     hyper-parameters of models
     """
     halving_gridsearch_params = dict(
-        factor=2,
+        factor=3,
         scoring="neg_root_mean_squared_error",
         random_state=1992,
         refit=False,
+        min_resources=S.N_SPLITS * 3,
         n_jobs=-1,
     )
     tuners = [
-        {
-            "name": "Linear",
-            "model": HalvingGridSearchCV(
-                estimator=_get_pipeline(
-                    ElasticNetCV(n_alphas=100, max_iter=10**6,
-                                 tol=1e-5, cv=3)
-                ),
-                param_grid=dict(
-                    pca__n_components=np.linspace(0.8, 1-1e-15, 10),
-                    classifier__l1_ratio=np.linspace(0.01, 0.99, 10),
-                    classifier__normalize=[True, False],
-                ),
-                cv=deepcopy(splitter),
-                **halving_gridsearch_params,
-            ),
-        },
         {
             "name": "SVM",
             "model": HalvingGridSearchCV(
                 estimator=_get_pipeline(SVR()),
                 param_grid=[
                     dict(
-                        pca__n_components=np.linspace(0.8, 1-1e-15, 10),
+                        pca__n_components=np.linspace(0.8, 1-1e-15,
+                                                      5),
+                        pca__whiten=[True, False],
                         classifier__kernel=["rbf"],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
-                        classifier__C=np.linspace(0.1, 100.0, 20),
+                        classifier__C=np.linspace(0.1, 10.0, 20),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                     dict(
-                        pca__n_components=np.linspace(0.8, 1-1e-15, 10),
+                        pca__n_components=np.linspace(0.8, 1-1e-15,
+                                                      5),
+                        pca__whiten=[True, False],
                         classifier__kernel=["sigmoid"],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
-                        classifier__C=np.linspace(0.1, 100.0, 20),
+                        classifier__C=np.linspace(0.1, 10.0, 20),
                         classifier__coef0=np.linspace(0.0, 100.0, 10),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                     dict(
                         pca__n_components=np.linspace(0.8, 1-1e-15, 10),
+                        pca__whiten=[True, False],
                         classifier__kernel=["poly"],
                         classifier__degree=[2, 3, 4, 5],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
-                        classifier__C=np.linspace(0.1, 100.0, 20),
+                        classifier__C=np.linspace(0.1, 10.0, 20),
                         classifier__coef0=np.linspace(0.0, 100.0, 10),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                 ],
+                cv=deepcopy(splitter),
+                **halving_gridsearch_params,
+            ),
+        },
+        {
+            "name": "Linear",
+            "model": HalvingGridSearchCV(
+                estimator=_get_pipeline(
+                    ElasticNetCV(n_alphas=100, max_iter=10**6,
+                                 tol=1e-5, cv=5)
+                ),
+                param_grid=dict(
+                    pca__n_components=np.linspace(0.8, 1-1e-15, 10),
+                    pca__whiten=[True, False],
+                    classifier__l1_ratio=np.linspace(0.01, 0.99, 10),
+                    classifier__normalize=[True, False],
+                ),
                 cv=deepcopy(splitter),
                 **halving_gridsearch_params,
             ),

@@ -15,3 +15,5 @@ FEATURE_FILE = "static_features.csv"
 
 # experiments
 N_SPLITS = 5
+RATIOS = 0., 0.25, 0.5, 0.75, 1.
+LABELS = 'AroMN', 'ValMN'

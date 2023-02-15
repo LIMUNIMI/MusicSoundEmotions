@@ -15,7 +15,8 @@ license = {text = "MIT"}
 
 [tool.pdm]
 [tool.pdm.scripts]
-experiment = "python -m music_sound_emotions.validation"
+tune_and_validate = "python -m music_sound_emotions.validation tune_and_validate"
+experiment = "python -m music_sound_emotions.experiments"
 # install_pip = "python -m ensurepip"
 # install_deps = "python -m pip install kaleido==0.2"
 # post_install = {composite = ["install_pip", "install_deps"]}

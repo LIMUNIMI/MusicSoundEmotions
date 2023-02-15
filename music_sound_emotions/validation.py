@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from sklearn import metrics
 from sklearn.base import clone
 from sklearn.model_selection import StratifiedKFold
@@ -60,61 +61,70 @@ def set_label(label, *datasets):
         dataset.set_label(label)
 
 
-def main(label, p):
+@dataclass
+class Main:
+    p: float = 0.5
 
-    from . import settings as S
-    from .data import load_data
-    from .models import get_best_model, get_tuners
+    def __post_init__(self):
+        from . import settings as S
+        from .data import load_data
 
-    print("Loading data")
-    iads, pmemo = load_data()
-
-    splitter = MixedStratifiedKFold(
-        iads,
-        pmemo,
-        p=p,
-        base_splitter=StratifiedKFold(
-            n_splits=S.N_SPLITS, random_state=1983, shuffle=True
-        ),
-        random_state=1992,
-    )
-    full_data = splitter.get_full_data()
-
-    set_label(label, iads, pmemo, full_data)
-
-    for tuner in get_tuners(splitter):
-        print(f"Tuning {tuner['name']}")
-        # tuning hyperparameters
-        tuner["model"].fit(full_data.X, full_data.y)
-        # cross-validate best result
-        print("Cross-validating best estimator")
-        iads_res, pmemo_res = cross_validate(
-            get_best_model(tuner),
-            iads,
-            pmemo,
-            splitter,
-            [
-                metrics.r2_score,
-                lambda x, y: metrics.mean_squared_error(x, y, squared=False),
-                metrics.mean_absolute_error,
-            ],
-            label,
+        print("Loading data")
+        self.iads, self.pmemo = load_data()
+        self.splitter = MixedStratifiedKFold(
+            self.iads,
+            self.pmemo,
+            p=self.p,
+            base_splitter=StratifiedKFold(
+                n_splits=S.N_SPLITS, random_state=1983, shuffle=True
+            ),
+            random_state=1992,
         )
 
-        print("\n\n___________________")
-        print("Obtained metrics for IADS")
-        print("   r2, RMSE, MAE")
-        for v, err in iads_res:
-            print(f"{v:.2e} ± {err:.2e}")
-        print("___________________")
-        print("Obtained metrics for PMEmo")
-        print("   r2, RMSE, MAE")
-        for v, err in pmemo_res:
-            print(f"{v:.2e} ± {err:.2e}")
-        print()
+    def _set_p(self, p):
+        self.splitter.p = p
+
+    def tune_and_validate(self, label):
+
+        from .models import get_best_model, get_tuners
+
+        full_data = self.splitter.get_full_data()
+
+        set_label(label, self.iads, self.pmemo, full_data)
+
+        for tuner in get_tuners(self.splitter):
+            print(f"Tuning {tuner['name']}")
+            # tuning hyperparameters
+            tuner["model"].fit(full_data.X, full_data.y)
+            # cross-validate best result
+            print("Cross-validating best estimator")
+            iads_res, pmemo_res = cross_validate(
+                get_best_model(tuner),
+                self.iads,
+                self.pmemo,
+                self.splitter,
+                [
+                    metrics.r2_score,
+                    lambda x, y: metrics.mean_squared_error(x, y, squared=False),
+                    metrics.mean_absolute_error,
+                ],
+                label,
+            )
+
+            print("\n\n___________________")
+            print("Obtained metrics for IADS")
+            print("   r2, RMSE, MAE")
+            for v, err in iads_res:
+                print(f"{v:.2e} ± {err:.2e}")
+            print("___________________")
+            print("Obtained metrics for PMEmo")
+            print("   r2, RMSE, MAE")
+            for v, err in pmemo_res:
+                print(f"{v:.2e} ± {err:.2e}")
+            print()
 
 
 if __name__ == "__main__":
     import fire
 
-    fire.Fire(main)
+    fire.Fire(Main)
