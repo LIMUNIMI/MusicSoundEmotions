@@ -1,9 +1,11 @@
 [project]
-name = ""
-version = ""
-description = ""
+name = "music_sound_emotions"
+version = "0.1"
+description = "Mixing music and sounds for emotion recognition"
 authors = [
     {name = "Federico Simonetta", email = "fsimonetta@iccmu.es"},
+    {name = "Francesca Certo"},
+    {name = "Stavros Ntalampiras"},
 ]
 dependencies = [
     "auto-sklearn==0.15.0",
