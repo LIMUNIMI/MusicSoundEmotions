@@ -28,7 +28,7 @@ For this approach, see below.
 ### API
 
 To use this code into your own, just install it with pip:
-  `pip install git+https://github.com/LIMUNIMI/MusicSoundEmotions.git`
+  `pip install --ignore-requires-python git+https://github.com/LIMUNIMI/MusicSoundEmotions.git`
 
 Youcan perform feature extraction using `python -m music_sound_emotions.features`.
 
