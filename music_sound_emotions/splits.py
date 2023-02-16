@@ -28,9 +28,10 @@ class MixedStratifiedKFold:
 
     def __post_init__(self):
         self.full_data_ = DataXy(
-            pd.concat([self.data_a.X, self.data_b.X], axis=0),
-            pd.concat([self.data_a.y, self.data_b.y], axis=0),
+            pd.concat([self.data_a.X, self.data_b.X], axis=0).reset_index(drop=True),
+            pd.concat([self.data_a.y, self.data_b.y], axis=0).reset_index(drop=True),
         )
+        self.random_state = np.random.default_rng(self.random_state)
 
     def get_n_splits(self, *args):
         return self.base_splitter.get_n_splits(*args)
@@ -41,6 +42,16 @@ class MixedStratifiedKFold:
 
     def get_full_data(self):
         return self.full_data_
+
+    def get_mixed_data(self, **kwargs):
+        idx_a = np.arange(self.data_a.n_samples)
+        idx_b = np.arange(self.data_b.n_samples)
+        a_probs = self.data_a.get_y_probs()
+        b_probs = self.data_b.get_y_probs()
+        mixed_idx = self._stratified_mix_susbsample(idx_a, idx_b, a_probs, b_probs)
+        return DataXy(
+            self.full_data_.X.loc[mixed_idx], self.full_data_.y.loc[mixed_idx], **kwargs
+        )
 
     def _stratified_mix_susbsample(self, arr_a, arr_b, y_a_ratios, y_b_ratios):
         N = min(arr_a.shape[0], arr_b.shape[0])
@@ -60,12 +71,10 @@ class MixedStratifiedKFold:
         return np.concatenate([arr_a, arr_b])
 
     def _init_split(self):
-        if isinstance(self.random_state, int):
-            self.random_state = np.random.default_rng(self.random_state)
         y_a = self.data_a.get_classes()
         y_b = self.data_b.get_classes()
-        y_a_probs = _get_probs_from_class_ratio(y_a)
-        y_b_probs = _get_probs_from_class_ratio(y_b)
+        y_a_probs = self.data_a.get_y_probs()
+        y_b_probs = self.data_b.get_y_probs()
 
         splitter_a = self.base_splitter.split(self.data_a.X, y_a)
         splitter_b = self.base_splitter.split(self.data_b.X, y_b)
@@ -97,34 +106,6 @@ class MixedStratifiedKFold:
             )
 
             yield train, test_a, test_b + self.data_a.n_samples
-
-    def split(self, X=None, y=None, groups=None):
-        k1, splitter_a, splitter_b, y_a_probs, y_b_probs = self._init_split()
-
-        for iteration in range(k1):
-            train_a, test_a = next(splitter_a)
-            train_b, test_b = next(splitter_b)
-
-            # subsampling while keeping the proportion of the classes inferred
-            train = self._stratified_mix_susbsample(
-                train_a, train_b, y_a_probs, y_b_probs
-            )
-            test = self._stratified_mix_susbsample(
-                test_a, test_b, y_a_probs, y_b_probs
-            )
-
-            yield train, test
-
-
-def _get_probs_from_class_ratio(arr):
-    """returns an array where each value is substituted by the ratio between that
-    value and the total number of elements in `arr`"""
-    out = arr.copy().astype(np.float)
-    vals, count = np.unique(arr, return_counts=True)
-    tot = count.sum()
-    for i in range(vals.shape[0]):
-        out[out == vals[i]] = count[i] / tot
-    return out
 
 
 def _n(arr):

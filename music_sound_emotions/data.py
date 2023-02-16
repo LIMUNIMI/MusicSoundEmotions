@@ -12,7 +12,8 @@ from . import settings as S
 class DataXy:
     X: np.ndarray
     y: np.ndarray
-    min_class_cardinality: int = S.N_SPLITS * 2
+    min_class_cardinality: int = S.N_SPLITS ** 2
+    n_clusters: int = None
 
     def __post_init__(self):
         assert (
@@ -24,13 +25,29 @@ class DataXy:
 
         # computing classes
         y_ = self.y[["AroMN", "ValMN"]] / 1
-        self.y_classes_ = _cluster(y_, min_cardinality=self.min_class_cardinality)
+        self.y_classes_ = _cluster(
+            y_,
+            min_cardinality=self.min_class_cardinality,
+            n_clusters=self.n_clusters,
+        )
+
+        # computing probs
+        y_probs_ = self.y_classes_.copy().astype(np.float)
+        vals, count = np.unique(self.y_classes_, return_counts=True)
+        for i in range(vals.shape[0]):
+            y_probs_[y_probs_ == vals[i]] = count[i]
+        self.y_probs_ = y_probs_ / y_probs_.sum()
 
     def set_label(self, label: str):
         self.y = self._y_backup[label]
 
     def get_classes(self):
         return self.y_classes_
+
+    def get_y_probs(self):
+        """returns an array where each value is substituted by the ratio between that
+        value and the total number of elements in `data.get_classes`"""
+        return self.y_probs_
 
 
 def load_data():
@@ -59,6 +76,7 @@ def load_data_x(dirs, fname):
         filepath = Path(dir) / fname
         out.append(pd.read_csv(filepath, sep=";"))
     out = pd.concat(out)
+    del out["frameTime"]
     out.rename(columns={"name": "ID"}, inplace=True)
     out["ID"] = out["ID"].str[1:-5].astype(str)
     _2 = out["ID"].str.endswith("_2")
@@ -96,20 +114,29 @@ def load_pmemo_y(pmemo_dir):
     return df[["ID", "AroMN", "AroSD", "ValMN", "ValSD"]]
 
 
-def _cluster(X, metric="euclidean", linkage="ward", min_cardinality=5):
+def _cluster(X, metric="euclidean", linkage="ward", min_cardinality=5, n_clusters=None):
+    """
+    Returns the clusters of X so that the largest umber of clusters is returned,
+    while keeping the minimum caridnality equal to `min_cardinality`
+    """
 
     print("  [Clustering]")
-    assert min_cardinality < X.shape[0]
+    assert min_cardinality or n_clusters
+    if min_cardinality:
+        assert min_cardinality < X.shape[0]
 
     K = X.shape[0]
     # define the agglomerative clustering model
     model = AgglomerativeClustering(
         # in sklearn 1.2 affinity -> metric
-        n_clusters=K // min_cardinality,
+        n_clusters=K // min_cardinality if min_cardinality else n_clusters,
         affinity=metric,
         distance_threshold=None,
         linkage=linkage,
     )
+
+    if n_clusters:
+        return model.fit_predict(X)
 
     # fit the model to the data
     model.fit(X)

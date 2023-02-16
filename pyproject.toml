@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "auto-sklearn==0.15.0",
     "fire>=0.5.0",
+    "tqdm>=4.64.1",
 ]
 requires-python = ">=3.9, <3.10"
 license = {text = "MIT"}

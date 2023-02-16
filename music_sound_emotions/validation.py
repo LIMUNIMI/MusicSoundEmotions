@@ -1,12 +1,13 @@
 from dataclasses import dataclass
+
+import numpy as np
+import scipy
 from sklearn import metrics
 from sklearn.base import clone
 from sklearn.model_selection import StratifiedKFold
 
+from . import settings as S
 from .splits import DataXy, MixedStratifiedKFold
-
-import numpy as np
-import scipy
 
 
 def cross_validate(
@@ -50,7 +51,7 @@ def confidence(dist, conf_level=0.95):
     dist = np.asarray(dist)
     s = np.std(dist, ddof=1)
     n = dist.shape[0]
-    df = n-1
+    df = n - 1
     t_val = scipy.stats.t.ppf((1 + conf_level) / 2, df)
     moe = t_val * s / np.sqrt(n)
     return moe
@@ -89,13 +90,21 @@ class Main:
         from .models import get_best_model, get_tuners
 
         full_data = self.splitter.get_full_data()
+        mixed_data = self.splitter.get_mixed_data(
+            # n_clusters=S.N_SPLITS * 2,
+            # min_class_cardinality=None
+        )
 
-        set_label(label, self.iads, self.pmemo, full_data)
+        set_label(label, self.iads, self.pmemo, full_data, mixed_data)
 
-        for tuner in get_tuners(self.splitter):
+        for tuner in get_tuners(self.splitter.base_splitter):
             print(f"Tuning {tuner['name']}")
             # tuning hyperparameters
-            tuner["model"].fit(full_data.X, full_data.y)
+            if hasattr(tuner["model"], "set_y_classes"):
+                tuner["model"].set_y_classes(
+                    mixed_data.get_classes(), mixed_data.get_y_probs()
+                )
+            tuner["model"].fit(mixed_data.X, mixed_data.y)
             # cross-validate best result
             print("Cross-validating best estimator")
             iads_res, pmemo_res = cross_validate(
