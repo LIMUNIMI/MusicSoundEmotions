@@ -10,14 +10,18 @@ from sklearn.decomposition import PCA
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.linear_model import ElasticNetCV
 from sklearn.metrics import get_scorer
-from sklearn.model_selection import (BaseCrossValidator, HalvingGridSearchCV,
-                                     ParameterGrid)
+from sklearn.model_selection import (
+    BaseCrossValidator,
+    HalvingGridSearchCV,
+    ParameterGrid,
+)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from tqdm import tqdm
 
 from . import settings as S
+from .settings import tlog
 
 
 def _get_pipeline(classifier):
@@ -101,10 +105,8 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
                         classifier__C=np.geomspace(0.1, 10.0, 20),
-                        classifier__coef0=np.linspace(0.0, 100.0,
-                                                      10),
-                        classifier__epsilon=np.linspace(0.0, 1.0,
-                                                        10),
+                        classifier__coef0=np.linspace(0.0, 100.0, 10),
+                        classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                     dict(
                         pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
@@ -114,10 +116,8 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
                         classifier__C=np.geomspace(0.1, 10.0, 20),
-                        classifier__coef0=np.linspace(0.0, 100.0,
-                                                      10),
-                        classifier__epsilon=np.linspace(0.0, 1.0,
-                                                        10),
+                        classifier__coef0=np.linspace(0.0, 100.0, 10),
+                        classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                 ],
                 cv=deepcopy(splitter),
@@ -127,7 +127,7 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
         {
             "name": "AutoML",
             "model": AutoSklearnRegressor(
-                time_left_for_this_task=8 * 3600,
+                time_left_for_this_task=4 * 3600,
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
@@ -164,12 +164,12 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
         tot = X.shape[0]
         resources = self.min_resources
         best_params = list(ParameterGrid(self.param_grid))
-        print(f"Total parameter sets: {len(best_params)}")
+        tlog(f"Total parameter sets: {len(best_params)}")
         i = 0
         with Parallel(n_jobs=self.n_jobs) as parallel:
             while resources < tot:
                 i += 1
-                print(f"Iteration {i}")
+                tlog(f"Iteration {i}")
                 scores = []
                 idx = self.random_state.choice(
                     np.arange(tot),
@@ -191,9 +191,9 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
                             cv_scores.append(score)
                         return np.mean(cv_scores)
 
-                scores = parallel(
-                    delayed(_cv_valid)(params) for params in tqdm(best_params)
-                )
+                bar = tqdm(best_params)
+                bar.set_description(tlog._log_spaces * " ")
+                scores = parallel(delayed(_cv_valid)(params) for params in bar)
 
                 resources = min(tot, 2 * resources)
                 # sort best_params by scores

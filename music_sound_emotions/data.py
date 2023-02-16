@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 
+from .settings import tlog
 from . import settings as S
 
 
@@ -120,7 +121,7 @@ def _cluster(X, metric="euclidean", linkage="ward", min_cardinality=5, n_cluster
     while keeping the minimum caridnality equal to `min_cardinality`
     """
 
-    print("  [Clustering]")
+    tlog("  [Clustering]")
     assert min_cardinality or n_clusters
     if min_cardinality:
         assert min_cardinality < X.shape[0]
@@ -153,6 +154,6 @@ def _cluster(X, metric="euclidean", linkage="ward", min_cardinality=5, n_cluster
         model.n_clusters -= 1
         labels = model.fit_predict(X)
         t = np.unique(labels, return_counts=True)[1].min()
-    print("  [Ended]")
+    tlog("  [Ended]")
 
     return labels

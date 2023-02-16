@@ -10,6 +10,7 @@ from sklearn.model_selection import StratifiedKFold
 
 from . import settings as S
 from .splits import DataXy, MixedStratifiedKFold
+from .settings import tlog
 
 
 def cross_validate(
@@ -75,7 +76,7 @@ class Main:
     def __post_init__(self):
         from .data import load_data
 
-        print("Loading data")
+        tlog("Loading data")
         self.iads, self.pmemo = load_data()
         self.splitter = MixedStratifiedKFold(
             self.iads,
@@ -103,7 +104,7 @@ class Main:
         set_label(label, self.iads, self.pmemo, full_data, mixed_data)
 
         for tuner in get_tuners(self.splitter.base_splitter):
-            print(f"Tuning {tuner['name']}")
+            tlog(f"Tuning {tuner['name']}")
             # tuning hyperparameters
             if hasattr(tuner["model"], "set_y_classes"):
                 tuner["model"].set_y_classes(
@@ -111,7 +112,7 @@ class Main:
                 )
             tuner["model"].fit(mixed_data.X, mixed_data.y)
             # cross-validate best result
-            print("Cross-validating best estimator")
+            tlog("Cross-validating best estimator")
             iads_res, pmemo_res = cross_validate(
                 get_best_model(tuner),
                 self.iads,
@@ -127,17 +128,17 @@ class Main:
 
             pickle.dump(get_best_model(tuner), open(tuner["name"] + ".pkl", "wb"))
 
-            print("\n\n___________________")
-            print("Obtained metrics for IADS")
-            print("   r2, RMSE, MAE")
+            tlog("\n\n___________________")
+            tlog("Obtained metrics for IADS")
+            tlog("   r2, RMSE, MAE")
             for v, err in iads_res:
-                print(f"{v:.2e} ± {err:.2e}")
-            print("___________________")
-            print("Obtained metrics for PMEmo")
-            print("   r2, RMSE, MAE")
+                tlog(f"{v:.2e} ± {err:.2e}")
+            tlog("___________________")
+            tlog("Obtained metrics for PMEmo")
+            tlog("   r2, RMSE, MAE")
             for v, err in pmemo_res:
-                print(f"{v:.2e} ± {err:.2e}")
-            print()
+                tlog(f"{v:.2e} ± {err:.2e}")
+            tlog()
 
 
 if __name__ == "__main__":
