@@ -1,7 +1,9 @@
+import pickle
 from dataclasses import dataclass
 
 import numpy as np
 import scipy
+from autosklearn.regression import AutoSklearnRegressor
 from sklearn import metrics
 from sklearn.base import clone
 from sklearn.model_selection import StratifiedKFold
@@ -30,8 +32,12 @@ def cross_validate(
     X, y = full_data.X.to_numpy(), full_data.y.to_numpy()
     for train, test_a, test_b in splitter.custom_split():
 
-        model_ = clone(model)
-        model_.fit(X[train], y[train])
+        if isinstance(model, AutoSklearnRegressor):
+            model.refit(X[train], y[train])
+            model_ = model
+        else:
+            model_ = clone(model)
+            model_.fit(X[train], y[train])
 
         y_a_cap = model_.predict(X[test_a])
         y_a_true = y[test_a]
@@ -67,7 +73,6 @@ class Main:
     p: float = 0.5
 
     def __post_init__(self):
-        from . import settings as S
         from .data import load_data
 
         print("Loading data")
@@ -119,6 +124,8 @@ class Main:
                 ],
                 label,
             )
+
+            pickle.dump(get_best_model(tuner), open(tuner["name"] + ".pkl", "wb"))
 
             print("\n\n___________________")
             print("Obtained metrics for IADS")

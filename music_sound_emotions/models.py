@@ -10,7 +10,8 @@ from sklearn.decomposition import PCA
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.linear_model import ElasticNetCV
 from sklearn.metrics import get_scorer
-from sklearn.model_selection import HalvingGridSearchCV, ParameterGrid
+from sklearn.model_selection import (BaseCrossValidator, HalvingGridSearchCV,
+                                     ParameterGrid)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
@@ -36,7 +37,6 @@ def get_best_model(tuner: dict):
 
     m = tuner["model"]
     if isinstance(m, AutoSklearnRegressor):
-        m.fit = m.refit
         return m
     elif isinstance(m, HalvingGridSearchCV):
         params = getattr(m, "best_params_", None)
@@ -49,7 +49,7 @@ def get_best_model(tuner: dict):
         )
 
 
-def get_tuners(splitter) -> list:
+def get_tuners(splitter: BaseCrossValidator) -> list:
     """
     Given a splitter, returns a list of estimators whose `fit` methods tunes
     hyper-parameters of models
@@ -64,46 +64,6 @@ def get_tuners(splitter) -> list:
         verbose=3,
     )
     tuners = [
-        {
-            "name": "SVM",
-            "model": CustomHalvingGridSearchCV(
-                estimator=_get_pipeline(SVR()),
-                param_grid=[
-                    dict(
-                        pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
-                        pca__whiten=[True, False],
-                        classifier__kernel=["rbf"],
-                        classifier__gamma=["scale", "auto"],
-                        classifier__shrinking=[True, False],
-                        classifier__C=np.geomspace(0.1, 10.0, 10),
-                        classifier__epsilon=np.linspace(0.0, 1.0, 5),
-                    ),
-                    dict(
-                        pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
-                        pca__whiten=[True, False],
-                        classifier__kernel=["sigmoid"],
-                        classifier__gamma=["scale", "auto"],
-                        classifier__shrinking=[True, False],
-                        classifier__C=np.geomspace(0.1, 10.0, 10),
-                        classifier__coef0=np.linspace(0.0, 100.0, 5),
-                        classifier__epsilon=np.linspace(0.0, 1.0, 5),
-                    ),
-                    dict(
-                        pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
-                        pca__whiten=[True, False],
-                        classifier__kernel=["poly"],
-                        classifier__degree=[2, 3, 4, 5],
-                        classifier__gamma=["scale", "auto"],
-                        classifier__shrinking=[True, False],
-                        classifier__C=np.geomspace(0.1, 10.0, 10),
-                        classifier__coef0=np.linspace(0.0, 100.0, 5),
-                        classifier__epsilon=np.linspace(0.0, 1.0, 5),
-                    ),
-                ],
-                cv=deepcopy(splitter),
-                **halving_gridsearch_params,
-            ),
-        },
         {
             "name": "Linear",
             "model": CustomHalvingGridSearchCV(
@@ -121,6 +81,50 @@ def get_tuners(splitter) -> list:
             ),
         },
         {
+            "name": "SVM",
+            "model": CustomHalvingGridSearchCV(
+                estimator=_get_pipeline(SVR()),
+                param_grid=[
+                    dict(
+                        pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
+                        pca__whiten=[True, False],
+                        classifier__kernel=["rbf"],
+                        classifier__gamma=["scale", "auto"],
+                        classifier__shrinking=[True, False],
+                        classifier__C=np.geomspace(0.1, 10.0, 20),
+                        classifier__epsilon=np.linspace(0.0, 1.0, 10),
+                    ),
+                    dict(
+                        pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
+                        pca__whiten=[True, False],
+                        classifier__kernel=["sigmoid"],
+                        classifier__gamma=["scale", "auto"],
+                        classifier__shrinking=[True, False],
+                        classifier__C=np.geomspace(0.1, 10.0, 20),
+                        classifier__coef0=np.linspace(0.0, 100.0,
+                                                      10),
+                        classifier__epsilon=np.linspace(0.0, 1.0,
+                                                        10),
+                    ),
+                    dict(
+                        pca__n_components=np.linspace(0.8, 1 - 1e-15, 5),
+                        pca__whiten=[True, False],
+                        classifier__kernel=["poly"],
+                        classifier__degree=[2, 3, 4, 5],
+                        classifier__gamma=["scale", "auto"],
+                        classifier__shrinking=[True, False],
+                        classifier__C=np.geomspace(0.1, 10.0, 20),
+                        classifier__coef0=np.linspace(0.0, 100.0,
+                                                      10),
+                        classifier__epsilon=np.linspace(0.0, 1.0,
+                                                        10),
+                    ),
+                ],
+                cv=deepcopy(splitter),
+                **halving_gridsearch_params,
+            ),
+        },
+        {
             "name": "AutoML",
             "model": AutoSklearnRegressor(
                 time_left_for_this_task=8 * 3600,
@@ -129,7 +133,8 @@ def get_tuners(splitter) -> list:
                 memory_limit=10000,
                 ensemble_nbest=10,
                 metric=autosklearn.metrics.mean_squared_error,
-                resampling_strategy=deepcopy(splitter),
+                resampling_strategy="cv",
+                resampling_strategy_arguments=dict(shuffle=True, folds=S.N_SPLITS),
             ),
         },
     ]
@@ -193,9 +198,14 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
                 resources = min(tot, 2 * resources)
                 # sort best_params by scores
                 best_params = [
-                    x for _, x in sorted(zip(scores, best_params), reverse=True)
+                    x
+                    for _, x in sorted(
+                        zip(scores, best_params), key=lambda x: x[0], reverse=True
+                    )
                 ]
                 # keeping only the best parameters
                 L = round(len(best_params) / self.factor)
                 L = len(best_params) if L <= 1 else L
                 best_params = best_params[:L]
+                self.best_params_ = best_params[0]
+        return self
