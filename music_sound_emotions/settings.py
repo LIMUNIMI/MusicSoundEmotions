@@ -34,7 +34,7 @@ LABELS = "AroMN", "ValMN"
 class Tlog:
     _log_spaces = 0
 
-    def __call__(self, message: str):
+    def __call__(self, message: str = ""):
         print(" " * self._log_spaces + message)
 
 

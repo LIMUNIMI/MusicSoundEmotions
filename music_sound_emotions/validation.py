@@ -105,6 +105,7 @@ class Main:
 
         for tuner in get_tuners(self.splitter.base_splitter):
             tlog(f"Tuning {tuner['name']}")
+            tlog._log_spaces += 4
             # tuning hyperparameters
             if hasattr(tuner["model"], "set_y_classes"):
                 tuner["model"].set_y_classes(
@@ -128,7 +129,8 @@ class Main:
 
             pickle.dump(get_best_model(tuner), open(tuner["name"] + ".pkl", "wb"))
 
-            tlog("\n\n___________________")
+            tlog("\n\n")
+            tlog("___________________")
             tlog("Obtained metrics for IADS")
             tlog("   r2, RMSE, MAE")
             for v, err in iads_res:
@@ -139,6 +141,7 @@ class Main:
             for v, err in pmemo_res:
                 tlog(f"{v:.2e} ± {err:.2e}")
             tlog()
+            tlog._log_spaces -= 4
 
 
 if __name__ == "__main__":

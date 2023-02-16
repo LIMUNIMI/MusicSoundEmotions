@@ -169,7 +169,6 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
         with Parallel(n_jobs=self.n_jobs) as parallel:
             while resources < tot:
                 i += 1
-                tlog(f"Iteration {i}")
                 scores = []
                 idx = self.random_state.choice(
                     np.arange(tot),
@@ -192,7 +191,8 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
                         return np.mean(cv_scores)
 
                 bar = tqdm(best_params)
-                bar.set_description(tlog._log_spaces * " ")
+                bar.set_description(tlog._log_spaces * " " +
+                                    f"Iteration {i}")
                 scores = parallel(delayed(_cv_valid)(params) for params in bar)
 
                 resources = min(tot, 2 * resources)
