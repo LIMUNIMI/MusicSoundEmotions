@@ -129,7 +129,6 @@ class Main:
 
             pickle.dump(get_best_model(tuner), open(tuner["name"] + ".pkl", "wb"))
 
-            tlog("\n\n")
             tlog("___________________")
             tlog("Obtained metrics for IADS")
             tlog("   r2, RMSE, MAE")

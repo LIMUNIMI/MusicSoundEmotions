@@ -5,15 +5,15 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 
-from .settings import tlog
 from . import settings as S
+from .settings import tlog
 
 
 @dataclass
 class DataXy:
     X: np.ndarray
     y: np.ndarray
-    min_class_cardinality: int = S.N_SPLITS ** 2
+    min_class_cardinality: int = S.N_SPLITS**2
     n_clusters: int = None
 
     def __post_init__(self):
@@ -51,13 +51,19 @@ class DataXy:
         return self.y_probs_
 
 
-def load_data():
+def load_data(normalize=True):
+    """
+    If `normalize` is True, than IADS-E is normalized so that 1 -> -1 and 9 -> 1,
+    while pmemo is normalized so that 0 -> -1 and 1 -> 1
+    """
     iads_x = load_data_x(S.IADS_DIR, S.FEATURE_FILE)
     iads_y = load_iads_y(S.IADSE_DIR)
+    iads_y[["ValMN", "AroMN"]] = (iads_y[["ValMN", "AroMN"]] - 1) / 4 - 1
     iads = DataXy(*_merge(iads_x, iads_y))
 
     pmemo_x = load_data_x(S.PMEMO_DIR, S.FEATURE_FILE)
     pmemo_y = load_pmemo_y(S.PMEMO_DIR[0])
+    pmemo_y[["ValMN", "AroMN"]] = pmemo_y[["ValMN", "AroMN"]] * 2 - 1
     pmemo = DataXy(*_merge(pmemo_x, pmemo_y))
 
     return iads, pmemo
