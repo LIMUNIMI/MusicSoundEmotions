@@ -9,6 +9,7 @@ from sklearn.base import clone
 from sklearn.model_selection import StratifiedKFold
 
 from . import settings as S
+from .utils import logger, telegram_notify
 from .splits import DataXy, MixedStratifiedKFold
 from .settings import tlog
 
@@ -91,6 +92,7 @@ class Main:
     def _set_p(self, p):
         self.splitter.p = p
 
+    @logger.catch
     def tune_and_validate(self, label):
 
         from .models import get_best_model, get_tuners
@@ -147,3 +149,4 @@ if __name__ == "__main__":
     import fire
 
     fire.Fire(Main)
+    telegram_notify("Ended!")
