@@ -23,9 +23,10 @@ class DataXy:
         self.n_samples = self.X.shape[0]
         self.n_features = self.X.shape[1]
         self._y_backup = self.y.copy()
+        self.current_label_ = None
 
         # computing classes
-        y_ = self.y[["AroMN", "ValMN"]] / 1
+        y_ = self.y[["AroMN", "ValMN"]]
         self.y_classes_ = _cluster(
             y_,
             min_cardinality=self.min_class_cardinality,
@@ -40,7 +41,17 @@ class DataXy:
         self.y_probs_ = y_probs_ / y_probs_.sum()
 
     def set_label(self, label: str):
-        self.y = self._y_backup[label]
+        self.current_label_ = label
+        if label is None:
+            self.unset_label()
+        else:
+            self.y = self._y_backup[label]
+        return self
+
+    def unset_label(self):
+        self.current_label_ = None
+        self.y = self._y_backup
+        return self
 
     def get_classes(self):
         return self.y_classes_
