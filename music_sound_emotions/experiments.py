@@ -1,5 +1,6 @@
 from . import settings as S
 from . import validation
+from .utils import telegram_notify
 
 if __name__ == "__main__":
     obj = validation.Main()
@@ -15,3 +16,4 @@ if __name__ == "__main__":
             print("--------")
         S.tlog._log_spaces -= 4
         print("--------")
+    telegram_notify("Ended!")
