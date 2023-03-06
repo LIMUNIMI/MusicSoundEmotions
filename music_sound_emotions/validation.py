@@ -10,7 +10,7 @@ from sklearn.model_selection import StratifiedKFold
 
 from . import settings as S
 from .settings import tlog
-from .splits import DataXy, MixedStratifiedKFold
+from .splits import DataXy, AugmentedStratifiedKFold
 from .utils import logger, telegram_notify
 
 
@@ -18,12 +18,12 @@ def cross_validate(
     model,
     data_a: DataXy,
     data_b: DataXy,
-    splitter: MixedStratifiedKFold,
+    splitter: AugmentedStratifiedKFold,
     metrics: list,
     label: str,
 ):
     """
-    Given a model, cross validates it on the mixed data while testing on
+    Given a model, cross validates it on the augmented data while testing on
     the separated test folds
     """
 
@@ -73,6 +73,7 @@ def set_label(label, *datasets):
 
 @dataclass
 class Main:
+    order: tuple
     p: float = 0.5
 
     def __post_init__(self):
@@ -80,9 +81,9 @@ class Main:
 
         tlog("Loading data")
         self.iads, self.pmemo = load_data()
-        self.splitter = MixedStratifiedKFold(
-            self.iads,
-            self.pmemo,
+        self.splitter = AugmentedStratifiedKFold(
+            getattr(self, self.order[0]),
+            getattr(self, self.order[1]),
             p=self.p,
             base_splitter=StratifiedKFold(
                 n_splits=S.N_SPLITS, random_state=1983, shuffle=True
@@ -98,7 +99,7 @@ class Main:
         from .models import get_best_model, get_tuners
 
         full_data = self.splitter.get_full_data()
-        mixed_data = self.splitter.get_mixed_data(
+        mixed_data = self.splitter.get_augmented_data(
             # n_clusters=S.N_SPLITS * 2,
             # min_class_cardinality=None
         )
