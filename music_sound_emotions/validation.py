@@ -114,8 +114,12 @@ class Main:
                 tuner["model"].set_y_classes(
                     mixed_data.get_classes(), mixed_data.get_y_probs()
                 )
+            import time
+            ttt = time.time()
             tuner["model"].fit(mixed_data.X.to_numpy(),
                                mixed_data.y.to_numpy())
+            print("Time: ", time.time() - ttt)
+            telegram_notify(f"One done in {(time.time() - ttt)/60} minutes")
             # cross-validate best result
             tlog("Cross-validating best estimator")
             iads_res, pmemo_res = cross_validate(

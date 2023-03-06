@@ -63,11 +63,24 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
         scoring="neg_root_mean_squared_error",
         random_state=1992,
         refit=False,
-        min_resources=S.N_SPLITS**2,
+        min_resources=2 * S.N_SPLITS**2,
         n_jobs=-1,
         verbose=3,
     )
     tuners = [
+        {
+            "name": "AutoML",
+            "model": AutoSklearnRegressor(
+                time_left_for_this_task=4 * 3600,
+                n_jobs=-1,
+                seed=8229,
+                memory_limit=10000,
+                ensemble_nbest=10,
+                metric=autosklearn.metrics.mean_squared_error,
+                resampling_strategy="cv",
+                resampling_strategy_arguments=dict(shuffle=True, folds=S.N_SPLITS),
+            ),
+        },
         {
             "name": "Linear",
             "model": CustomHalvingGridSearchCV(
@@ -95,7 +108,7 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
                         classifier__kernel=["rbf"],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
-                        classifier__C=np.geomspace(0.1, 10.0, 20),
+                        classifier__C=np.geomspace(0.1, 10.0, 15),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                     dict(
@@ -104,7 +117,7 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
                         classifier__kernel=["sigmoid"],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
-                        classifier__C=np.geomspace(0.1, 10.0, 20),
+                        classifier__C=np.geomspace(0.1, 10.0, 15),
                         classifier__coef0=np.linspace(0.0, 100.0, 10),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
@@ -115,26 +128,13 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
                         classifier__degree=[2, 3, 4, 5],
                         classifier__gamma=["scale", "auto"],
                         classifier__shrinking=[True, False],
-                        classifier__C=np.geomspace(0.1, 10.0, 20),
+                        classifier__C=np.geomspace(0.1, 10.0, 15),
                         classifier__coef0=np.linspace(0.0, 100.0, 10),
                         classifier__epsilon=np.linspace(0.0, 1.0, 10),
                     ),
                 ],
                 cv=deepcopy(splitter),
                 **halving_gridsearch_params,
-            ),
-        },
-        {
-            "name": "AutoML",
-            "model": AutoSklearnRegressor(
-                time_left_for_this_task=4 * 3600,
-                n_jobs=-1,
-                seed=8229,
-                memory_limit=10000,
-                ensemble_nbest=10,
-                metric=autosklearn.metrics.mean_squared_error,
-                resampling_strategy="cv",
-                resampling_strategy_arguments=dict(shuffle=True, folds=S.N_SPLITS),
             ),
         },
     ]

@@ -11,10 +11,11 @@ identical environment, do as follows:
 3. Enter the project directory and run `pdm sync --no-self`
 4. Download IADS-E and PMEmo datasets ad unzip them
 5. Download OpenSmile 3.0.1
-6. Modify `music_sound_emotions/settings.py` to match your paths:
+6. Download and extract the datasets each in a different directory (IADS-E, IADS-2, PMEmo)
+7. Modify `music_sound_emotions/settings.py` to match your paths:
   * the path to OpenSmile root directory
   * the paths to the datasets root directories
-7. From the project root run:
+8. From the project root run:
   * `pdm features` to extract features
   * `pdm experiment` to reproduce our experiments
 

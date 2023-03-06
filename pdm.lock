@@ -146,6 +146,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "et-xmlfile"
+version = "1.1.0"
+requires_python = ">=3.6"
+summary = "An implementation of lxml.xmlfile for the standard library"
+
+[[package]]
 name = "fire"
 version = "0.5.0"
 summary = "A library for automatically generating command line interfaces."
@@ -345,6 +351,15 @@ dependencies = [
     "mkl-service",
     "mkl-umath",
     "tbb4py",
+]
+
+[[package]]
+name = "openpyxl"
+version = "3.1.1"
+requires_python = ">=3.6"
+summary = "A Python library to read/write Excel 2010 xlsx/xlsm files"
+dependencies = [
+    "et-xmlfile",
 ]
 
 [[package]]
@@ -583,7 +598,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:db2db4b8b20d49f60fe957c1627cbbf1d92bb82f92193ce76c0d70b66bfd942f"
+content_hash = "sha256:b65fb2440e369c19f96806834474814b9489682b97edabce5721dfb5a83b7931"
 
 [metadata.files]
 "attrs 22.2.0" = [
@@ -788,6 +803,10 @@ content_hash = "sha256:db2db4b8b20d49f60fe957c1627cbbf1d92bb82f92193ce76c0d70b66
 "emcee 3.1.4" = [
     {url = "https://files.pythonhosted.org/packages/1c/2c/426cf760d1f1161b2c57272c7efc495bef353b0d1d609d91708ddfb831a2/emcee-3.1.4-py2.py3-none-any.whl", hash = "sha256:13d216a96b4f60661839d5f6ec482eda9e86b499502cda2bf6d8cc839ccf3e59"},
     {url = "https://files.pythonhosted.org/packages/56/62/f8268fe4cf6f8af3860617a53e935e195ce7406d0b10f3ab0fb85bf17533/emcee-3.1.4.tar.gz", hash = "sha256:8e0e19dc8bcef9c6d02f860bef8ddc6c876b8878a6ce666943e2c5cfd9317fed"},
+]
+"et-xmlfile 1.1.0" = [
+    {url = "https://files.pythonhosted.org/packages/3d/5d/0413a31d184a20c763ad741cc7852a659bf15094c24840c5bdd1754765cd/et_xmlfile-1.1.0.tar.gz", hash = "sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c"},
+    {url = "https://files.pythonhosted.org/packages/96/c2/3dd434b0108730014f1b96fd286040dc3bcb70066346f7e01ec2ac95865f/et_xmlfile-1.1.0-py3-none-any.whl", hash = "sha256:a2ba85d1d6a74ef63837eed693bcb89c3f752169b0e3e7ae5b16ca5e1b3deada"},
 ]
 "fire 0.5.0" = [
     {url = "https://files.pythonhosted.org/packages/94/ed/3b9a10605163f48517931083aee8364d4d6d3bb1aa9b75eb0a4a5e9fbfc1/fire-0.5.0.tar.gz", hash = "sha256:a6b0d49e98c8963910021f92bba66f65ab440da2982b78eb1bbf95a0a34aacc6"},
@@ -1138,6 +1157,10 @@ content_hash = "sha256:db2db4b8b20d49f60fe957c1627cbbf1d92bb82f92193ce76c0d70b66
     {url = "https://pypi.anaconda.org/intel/simple/numpy/1.22.3/numpy-1.22.3-0-cp39-cp39-macosx_10_10_x86_64.whl", hash = "sha256:9130dafbe80f53420feae27eb55686e892ce152b4e62b5530335dd33d7b075a7"},
     {url = "https://pypi.anaconda.org/intel/simple/numpy/1.22.3/numpy-1.22.3-0-cp39-cp39-manylinux2014_x86_64.whl", hash = "sha256:64879f76ffd9deec7e1f0dd479dd7744693c2fd204730ad026aa742f62beef61"},
     {url = "https://pypi.anaconda.org/intel/simple/numpy/1.22.3/numpy-1.22.3-0-cp39-cp39-win_amd64.whl", hash = "sha256:f8dc141a2b42adb252b27a11067e171a56d578d15da4574c38fb4abe7bb29e86"},
+]
+"openpyxl 3.1.1" = [
+    {url = "https://files.pythonhosted.org/packages/10/bf/950ea7896f3c42ab04073cd2903f0a190ba77ef28bdf76191f6f86373712/openpyxl-3.1.1.tar.gz", hash = "sha256:f06d44e2c973781068bce5ecf860a09bcdb1c7f5ce1facd5e9aa82c92c93ae72"},
+    {url = "https://files.pythonhosted.org/packages/9e/57/1d3c2ce7f6f783be9b21569fc468a9f3660e35cc17017abfbbc26d3bd061/openpyxl-3.1.1-py2.py3-none-any.whl", hash = "sha256:a0266e033e65f33ee697254b66116a5793c15fc92daf64711080000df4cfe0a8"},
 ]
 "packaging 23.0" = [
     {url = "https://files.pythonhosted.org/packages/47/d5/aca8ff6f49aa5565df1c826e7bf5e85a6df852ee063600c1efa5b932968c/packaging-23.0.tar.gz", hash = "sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97"},
