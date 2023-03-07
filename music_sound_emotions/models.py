@@ -71,7 +71,7 @@ def get_tuners(splitter: BaseCrossValidator) -> list:
         {
             "name": "AutoML",
             "model": AutoSklearnRegressor(
-                time_left_for_this_task=4 * 3600,
+                time_left_for_this_task=24 * 3600,
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
