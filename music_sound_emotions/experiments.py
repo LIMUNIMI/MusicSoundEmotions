@@ -18,7 +18,7 @@ if __name__ == "__main__":
         print("--------")
 
     telegram_notify("Swapping data!")
-    obj.splitter.swap_data()
+    obj.splitter.swap()
     for p in S.RATIOS[:-1]:  # ratio p=1 is identical...
         S.tlog(f"Ratio: {p}")
         obj._set_p(p)
