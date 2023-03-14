@@ -15,6 +15,7 @@ class DataXy:
     y: np.ndarray
     min_class_cardinality: int = S.N_SPLITS**2
     n_clusters: int = None
+    name: str = ""
 
     def __post_init__(self):
         assert (
@@ -70,12 +71,12 @@ def load_data(normalize=True):
     iads_x = load_data_x(S.IADS_DIR, S.FEATURE_FILE)
     iads_y = load_iads_y(S.IADSE_DIR)
     iads_y[["ValMN", "AroMN"]] = (iads_y[["ValMN", "AroMN"]] - 1) / 4 - 1
-    iads = DataXy(*_merge(iads_x, iads_y))
+    iads = DataXy(*_merge(iads_x, iads_y), name="IADS")
 
     pmemo_x = load_data_x(S.PMEMO_DIR, S.FEATURE_FILE)
     pmemo_y = load_pmemo_y(S.PMEMO_DIR[0])
     pmemo_y[["ValMN", "AroMN"]] = pmemo_y[["ValMN", "AroMN"]] * 2 - 1
-    pmemo = DataXy(*_merge(pmemo_x, pmemo_y))
+    pmemo = DataXy(*_merge(pmemo_x, pmemo_y), name="PMEmo")
 
     return iads, pmemo
 

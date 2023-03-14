@@ -80,7 +80,7 @@ class Main:
         from .data import load_data
 
         tlog("Loading data")
-        self.iads, self.pmemo = load_data()
+        self.data1, self.data2 = load_data()
         self.splitter = AugmentedStratifiedKFold(
             getattr(self, self.order[0]),
             getattr(self, self.order[1]),
@@ -104,8 +104,8 @@ class Main:
             # min_class_cardinality=None
         )
 
-        old_label = self.iads.current_label_
-        set_label(label, self.iads, self.pmemo, full_data, mixed_data)
+        old_label = self.data1.current_label_
+        set_label(label, self.data1, self.data2, full_data, mixed_data)
 
         for tuner in get_tuners(self.splitter.base_splitter):
             tlog(f"Tuning {tuner['name']}")
@@ -123,10 +123,10 @@ class Main:
             telegram_notify(f"One done in {(time.time() - ttt)/60} minutes")
             # cross-validate best result
             tlog("Cross-validating best estimator")
-            iads_res, pmemo_res = cross_validate(
+            data1_res, data2_res = cross_validate(
                 get_best_model(tuner),
-                self.iads,
-                self.pmemo,
+                self.data1,
+                self.data2,
                 self.splitter,
                 [
                     metrics.r2_score,
@@ -139,19 +139,19 @@ class Main:
             pickle.dump(get_best_model(tuner), open(tuner["name"] + ".pkl", "wb"))
 
             tlog("___________________")
-            tlog("Obtained metrics for IADS")
+            tlog(f"Obtained metrics for {self.data1.name}")
             tlog("   r2, RMSE, MAE")
-            for v, err in iads_res:
+            for v, err in data1_res:
                 tlog(f"{v:.2e} ± {err:.2e}")
             tlog("___________________")
-            tlog("Obtained metrics for PMEmo")
+            tlog(f"Obtained metrics for {self.data2.name}")
             tlog("   r2, RMSE, MAE")
-            for v, err in pmemo_res:
+            for v, err in data2_res:
                 tlog(f"{v:.2e} ± {err:.2e}")
             tlog()
             tlog._log_spaces -= 4
 
-        set_label(old_label, self.iads, self.pmemo, full_data, mixed_data)
+        set_label(old_label, self.data1, self.data2, full_data, mixed_data)
 
 
 if __name__ == "__main__":

@@ -31,6 +31,7 @@ class AugmentedStratifiedKFold:
         self.full_data_ = DataXy(
             pd.concat([self.data_a.X, self.data_b.X], axis=0).reset_index(drop=True),
             pd.concat([self.data_a.y, self.data_b.y], axis=0).reset_index(drop=True),
+            name=f"{self.data_a.name}+{self.p}⨉{self.data_b.name}"
         )
         self.random_state = np.random.default_rng(self.random_state)
 
