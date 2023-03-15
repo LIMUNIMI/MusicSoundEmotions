@@ -81,9 +81,11 @@ class Main:
 
         tlog("Loading data")
         self.data1, self.data2 = load_data()
+        self.data1 = self.data1 if self.data1.name == self.order[0] else self.data2
+        self.data2 = self.data2 if self.data2.name == self.order[1] else self.data1
         self.splitter = AugmentedStratifiedKFold(
-            getattr(self, self.order[0]),
-            getattr(self, self.order[1]),
+            self.data1,
+            self.data2,
             p=self.p,
             base_splitter=StratifiedKFold(
                 n_splits=S.N_SPLITS, random_state=1983, shuffle=True
