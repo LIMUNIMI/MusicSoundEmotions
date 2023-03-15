@@ -120,7 +120,7 @@ class Main:
             tuner["model"].fit(mixed_data.X.to_numpy(),
                                mixed_data.y.to_numpy())
             print("Time: ", time.time() - ttt)
-            telegram_notify(f"One done in {(time.time() - ttt)/60} minutes")
+            telegram_notify(f"{tuner['name']} done in {(time.time() - ttt)/60} minutes")
             # cross-validate best result
             tlog("Cross-validating best estimator")
             data1_res, data2_res = cross_validate(
