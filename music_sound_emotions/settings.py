@@ -1,3 +1,4 @@
+from pprint import pprint
 from pathlib import Path
 
 #############################################
@@ -30,8 +31,7 @@ FEATURE_FILE = "static_features.csv"
 
 # experiments
 N_SPLITS = 5
-# RATIOS = 0.0, 0.25, 0.5, 0.75, 1.0
-RATIOS = 0.0, 1.0
+RATIOS = 0.0, 0.25, 0.5, 0.75, 1.0
 LABELS = "AroMN", "ValMN"
 
 # logging
@@ -41,7 +41,11 @@ class Tlog:
     _log_spaces = 0
 
     def __call__(self, message: str = ""):
-        print(" " * self._log_spaces + message)
+        if isinstance(message, str):
+            print_func = print
+        else:
+            print_func = pprint
+        print_func(" " * self._log_spaces + message)
 
 
 tlog = Tlog()

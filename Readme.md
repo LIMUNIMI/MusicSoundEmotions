@@ -37,7 +37,7 @@ You can perform the experiments using `python -m music_sound_emotions.experiment
 
 You can run one single experiment using `python -m
 music_sound_emotions.validation tune_and_validate --label=<LABEL> --p=<P>`, where:
-  * `P` must be float between 0 and 1 and corresponds to how much of IADS is mixed
+  * `P` must be float between 0 and 1 and corresponds to how much of IADS is added
     with PMEmo
   * `LABEL` must be one of `AroMN`, `ValMN`, `AroSD`, `ValSD` and correspond to
     Arousal/Valence mean/standard deviation.

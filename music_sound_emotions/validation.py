@@ -1,4 +1,6 @@
+import datetime
 import pickle
+import time
 from dataclasses import dataclass
 
 import numpy as np
@@ -10,7 +12,7 @@ from sklearn.model_selection import StratifiedKFold
 
 from . import settings as S
 from .settings import tlog
-from .splits import DataXy, AugmentedStratifiedKFold
+from .splits import AugmentedStratifiedKFold, DataXy
 from .utils import logger, telegram_notify
 
 
@@ -73,7 +75,7 @@ def set_label(label, *datasets):
 
 @dataclass
 class Main:
-    order: tuple
+    order: tuple = ('IADS', 'PMEmo')
     p: float = 0.5
 
     def __post_init__(self):
@@ -98,7 +100,7 @@ class Main:
 
     @logger.catch
     def tune_and_validate(self, label):
-        from .models import get_best_model, get_tuners
+        from .models import get_tuners, save_and_get_best_model
 
         full_data = self.splitter.get_full_data()
         mixed_data = self.splitter.get_augmented_data(
@@ -117,16 +119,16 @@ class Main:
                 tuner["model"].set_y_classes(
                     mixed_data.get_classes(), mixed_data.get_y_probs()
                 )
-            import time
             ttt = time.time()
-            tuner["model"].fit(mixed_data.X.to_numpy(),
-                               mixed_data.y.to_numpy())
+            tuner["model"].fit(mixed_data.X.to_numpy(), mixed_data.y.to_numpy())
             print("Time: ", time.time() - ttt)
             telegram_notify(f"{tuner['name']} done in {(time.time() - ttt)/60} minutes")
             # cross-validate best result
             tlog("Cross-validating best estimator")
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filepath = f"{tuner['name']}_{self.splitter.p:.2f}-{timestamp}.pickle"
             data1_res, data2_res = cross_validate(
-                get_best_model(tuner),
+                save_and_get_best_model(tuner, filepath),
                 self.data1,
                 self.data2,
                 self.splitter,
@@ -137,8 +139,6 @@ class Main:
                 ],
                 label,
             )
-
-            pickle.dump(get_best_model(tuner), open(tuner["name"] + ".pkl", "wb"))
 
             tlog("___________________")
             tlog(f"Obtained metrics for {self.data1.name}")

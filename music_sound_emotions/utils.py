@@ -14,14 +14,14 @@ logger.add("errors.log", retention=2, backtrace=True, diagnose=True)
 logger.add("errors.short.log", retention=2, backtrace=True, diagnose=False)
 
 telegram = notifiers.get_notifier("telegram")
+
 try:
     auth = json.load(open("./telegram.json"))
 except FileNotFoundError:
     telegram_ok = False
 else:
     telegram_ok = True
-    telegram_handler = NotificationHandler("telegram", defaults=auth)
-    logger.add(telegram_handler, level="ERROR")
+    logger.add(lambda m: telegram.notify(message=m[:4096], **auth), level="ERROR")
 
 
 def telegram_notify(message: str):

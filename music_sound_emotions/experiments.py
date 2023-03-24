@@ -3,7 +3,7 @@ from . import validation
 from .utils import telegram_notify
 
 if __name__ == "__main__":
-    obj = validation.Main(("iads", "pmemo"))
+    obj = validation.Main(("IADS", "PMEmo"))
     for p in S.RATIOS:
         S.tlog(f"Ratio: {p}")
         obj._set_p(p)
