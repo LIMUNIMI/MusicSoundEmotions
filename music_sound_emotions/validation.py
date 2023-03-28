@@ -73,9 +73,16 @@ def set_label(label, *datasets):
         dataset.set_label(label)
 
 
+def r2_score(y_true, y_pred):
+    ss_res = ((y_true - y_pred) ** 2).sum()
+    ss_tot = ((y_true - y_true.mean()) ** 2).sum()
+    r2 = 1 - (ss_res / ss_tot)
+    return r2
+
+
 @dataclass
 class Main:
-    order: tuple = ('IADS', 'PMEmo')
+    order: tuple = ("IADS", "PMEmo")
     p: float = 0.5
 
     def __post_init__(self):
@@ -133,8 +140,8 @@ class Main:
                 self.data2,
                 self.splitter,
                 [
-                    metrics.r2_score,
-                    lambda x, y: metrics.mean_squared_error(x, y, squared=False),
+                    r2_score,
+                    lambda x, y: np.linalg.norm(x - y, norm="fro"),
                     metrics.mean_absolute_error,
                 ],
                 label,
