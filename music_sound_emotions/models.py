@@ -93,7 +93,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold) -> list:
             "model": AutoSklearnRegressor(
                 # smac_scenario_args={"runcount_limit": 4},
                 # initial_configurations_via_metalearning=2,
-                time_left_for_this_task=60, #2 * 3600,
+                time_left_for_this_task=2 * 3600,
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
