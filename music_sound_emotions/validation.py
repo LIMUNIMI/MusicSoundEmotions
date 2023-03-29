@@ -1,14 +1,14 @@
 import datetime
-import pickle
 import time
 from dataclasses import dataclass
 
+from tqdm import tqdm
 import numpy as np
 import scipy
 from autosklearn.regression import AutoSklearnRegressor
 from sklearn import metrics
 from sklearn.base import clone
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, KFold
 
 from . import settings as S
 from .settings import tlog
@@ -18,8 +18,6 @@ from .utils import logger, telegram_notify
 
 def cross_validate(
     model,
-    data_a: DataXy,
-    data_b: DataXy,
     splitter: AugmentedStratifiedKFold,
     metrics: list,
     label: str,
@@ -35,7 +33,7 @@ def cross_validate(
     old_label = full_data.current_label_
     set_label(label, full_data)
     X, y = full_data.X.to_numpy(), full_data.y.to_numpy()
-    for train, test_a, test_b in splitter.custom_split():
+    for train, test_a, test_b in tqdm(splitter.custom_split(), desc="Cross-validating"):
         if isinstance(model, AutoSklearnRegressor):
             model.refit(X[train], y[train])
             model_ = model
@@ -90,8 +88,10 @@ class Main:
 
         tlog("Loading data")
         self.data1, self.data2 = load_data()
-        self.data1 = self.data1 if self.data1.name == self.order[0] else self.data2
-        self.data2 = self.data2 if self.data2.name == self.order[1] else self.data1
+        if self.data1.name != self.order[0]:
+            self.data1, self.data2 = self.data2, self.data1
+        if self.order[0] == self.order[1]:
+            self.data2 = self.data1
         self.splitter = AugmentedStratifiedKFold(
             self.data1,
             self.data2,
@@ -99,6 +99,9 @@ class Main:
             base_splitter=StratifiedKFold(
                 n_splits=S.N_SPLITS, random_state=1983, shuffle=True
             ),
+            # base_splitter=KFold(
+            #     n_splits=S.N_SPLITS, random_state=1983, shuffle=True
+            # ),
             random_state=1992,
         )
 
@@ -110,24 +113,25 @@ class Main:
         from .models import get_tuners, save_and_get_best_model
 
         full_data = self.splitter.get_full_data()
-        mixed_data = self.splitter.get_augmented_data(
-            # n_clusters=S.N_SPLITS * 2,
-            # min_class_cardinality=None
-        )
+        # augmented_data = self.splitter.get_augmented_data(
+        #     # n_clusters=S.N_SPLITS * 2,
+        #     # min_class_cardinality=None
+        # )
 
         old_label = self.data1.current_label_
-        set_label(label, self.data1, self.data2, full_data, mixed_data)
+        set_label(label, self.data1, self.data2, full_data) #, augmented_data)
 
-        for tuner in get_tuners(self.splitter.base_splitter):
+        for tuner in get_tuners(self.splitter):
             tlog(f"Tuning {tuner['name']}")
             tlog._log_spaces += 4
             # tuning hyperparameters
-            if hasattr(tuner["model"], "set_y_classes"):
-                tuner["model"].set_y_classes(
-                    mixed_data.get_classes(), mixed_data.get_y_probs()
-                )
+            # if hasattr(tuner["model"], "set_y_classes"):
+            #     tuner["model"].set_y_classes(
+            #         augmented_data.get_classes(), augmented_data.get_y_probs()
+            #     )
             ttt = time.time()
-            tuner["model"].fit(mixed_data.X.to_numpy(), mixed_data.y.to_numpy())
+            tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
+            # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())
             print("Time: ", time.time() - ttt)
             telegram_notify(f"{tuner['name']} done in {(time.time() - ttt)/60} minutes")
             # cross-validate best result
@@ -136,12 +140,10 @@ class Main:
             filepath = f"{tuner['name']}_{self.splitter.p:.2f}-{timestamp}.pickle"
             data1_res, data2_res = cross_validate(
                 save_and_get_best_model(tuner, filepath),
-                self.data1,
-                self.data2,
                 self.splitter,
                 [
                     r2_score,
-                    lambda x, y: np.linalg.norm(x - y, norm="fro"),
+                    lambda x, y: np.sqrt(np.mean((x - y) ** 2)),
                     metrics.mean_absolute_error,
                 ],
                 label,
@@ -160,7 +162,7 @@ class Main:
             tlog()
             tlog._log_spaces -= 4
 
-        set_label(old_label, self.data1, self.data2, full_data, mixed_data)
+        set_label(old_label, self.data1, self.data2, full_data) #, augmented_data)
 
 
 if __name__ == "__main__":

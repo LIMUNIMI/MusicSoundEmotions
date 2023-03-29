@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from sklearn.model_selection import BaseCrossValidator
 import numpy as np
 import pandas as pd
 
@@ -7,7 +8,7 @@ from .data import DataXy
 
 
 @dataclass
-class AugmentedStratifiedKFold:
+class AugmentedStratifiedKFold(BaseCrossValidator):
     """
     This class wraps a `BaseCrossValidator` object, but accepts 2 datasets and
     returns folds over the two datasets.
@@ -35,8 +36,8 @@ class AugmentedStratifiedKFold:
         )
         self.random_state = np.random.default_rng(self.random_state)
 
-    def get_n_splits(self, *args):
-        return self.base_splitter.get_n_splits(*args)
+    def get_n_splits(self, *args, **kwargs):
+        return self.base_splitter.get_n_splits(*args, **kwargs)
 
     def swap(self):
         """Swap the two datasets"""
@@ -99,12 +100,29 @@ class AugmentedStratifiedKFold:
 
         return k1, splitter_a, splitter_b, y_b_probs
 
+    def split(self, *args, **kwargs):
+        """
+        This returns two arrays:
+            1 for train
+            2. indices for test on both datasets A and B
+        """
+        k1, splitter_a, splitter_b, y_b_probs = self._init_split()
+
+        for iteration in range(k1):
+            train_a, test_a = next(splitter_a)
+            train_b, test_b = next(splitter_b)
+
+            # subsampling while keeping the proportion of the classes inferred
+            train = self._stratified_augmented_susbsample(train_a, train_b, y_b_probs)
+
+            yield train, np.concatenate([test_a, test_b + self.data_a.n_samples])
+
     def custom_split(self):
         """
         This returns three arrays:
             1 for train
             2. indices for test on dataset A
-            2. indices for test on dataset B
+            3. indices for test on dataset B
         """
         k1, splitter_a, splitter_b, y_b_probs = self._init_split()
 
