@@ -82,10 +82,10 @@ def load_data(normalize=True):
 
 
 def _merge(X, y):
-    df = X.merge(y, on="ID")
+    # drop_duplicates is due to the fact that I have extracted each file in PMEmo twice
+    df = X.merge(y, on="ID").drop_duplicates()
     X = df[X.columns].drop(columns=["ID"])
     y = df[y.columns].drop(columns=["ID"])
-    y /= 9
     return X, y
 
 
