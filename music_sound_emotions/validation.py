@@ -125,10 +125,9 @@ class Main:
             tlog(f"Tuning {tuner['name']}")
             tlog._log_spaces += 4
             # tuning hyperparameters
-            # if hasattr(tuner["model"], "set_y_classes"):
-            #     tuner["model"].set_y_classes(
-            #         augmented_data.get_classes(), augmented_data.get_y_probs()
-            #     )
+            if hasattr(tuner["model"], "set_total_resources"):
+                tuner["model"].set_total_resources(self.splitter.get_augmented_data_size())
+                tuner["model"].set_y_probs = full_data.get_y_probs()
             ttt = time.time()
             tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
             # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())

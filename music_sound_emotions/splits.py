@@ -61,6 +61,9 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             **kwargs,
         )
 
+    def get_augmented_data_size(self):
+        return self.data_a.n_samples + round(self.p * self.data_b.n_samples)
+
     def _stratified_augmented_susbsample(self, arr_a, arr_b, y_b_ratios):
         """
         This method takes two arrays (`arr_a` and `arr_b`) and returns a
