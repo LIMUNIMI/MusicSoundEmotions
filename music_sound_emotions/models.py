@@ -73,7 +73,7 @@ def save_and_get_best_model(tuner: dict, save_path: str) -> object:
         )
 
 
-def get_tuners(splitter: AugmentedStratifiedKFold) -> list:
+def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
     """
     Given a splitter, returns a list of estimators whose `fit` methods tunes
     hyper-parameters of models
@@ -93,7 +93,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold) -> list:
             "model": AutoSklearnRegressor(
                 # smac_scenario_args={"runcount_limit": 4},
                 # initial_configurations_via_metalearning=2,
-                time_left_for_this_task=4 * 3600,
+                time_left_for_this_task=S.AUTOML_DURATION,
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
@@ -160,6 +160,9 @@ def get_tuners(splitter: AugmentedStratifiedKFold) -> list:
             ),
         },
     ]
+
+    if only_automl:
+        tuners = [t for t in tuners if t["name"] == "AutoML"]
 
     return tuners
 

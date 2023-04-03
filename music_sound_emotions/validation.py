@@ -2,13 +2,13 @@ import datetime
 import time
 from dataclasses import dataclass
 
-from tqdm import tqdm
 import numpy as np
 import scipy
 from autosklearn.regression import AutoSklearnRegressor
 from sklearn import metrics
 from sklearn.base import clone
-from sklearn.model_selection import StratifiedKFold, KFold
+from sklearn.model_selection import KFold, StratifiedKFold
+from tqdm import tqdm
 
 from . import settings as S
 from .settings import tlog
@@ -82,6 +82,8 @@ def r2_score(y_true, y_pred):
 class Main:
     order: tuple = ("IADS", "PMEmo")
     p: float = 0.5
+    only_automl: bool = False
+    __remove_iads_music = False
 
     def __post_init__(self):
         from .data import load_data
@@ -108,6 +110,32 @@ class Main:
     def _set_p(self, p):
         self.splitter.p = p
 
+    @property
+    def remove_iads_music(self):
+        return self.__remove_iads_music
+
+    @remove_iads_music.setter
+    def remove_iads_music(self, newval):
+        if newval != self.__remove_iads_music:
+            self.__remove_iads_music = newval
+            if newval:
+                # was False, now it is True
+                self.data1_ = self.data1
+                self.data2_ = self.data2
+                self.data1 = self.data1.remove_music_ids()
+                self.data2 = self.data2.remove_music_ids()
+            else:
+                # was True, now it is False
+                self.data1 = self.data1_
+                self.data2 = self.data2_
+            # in any case, apply the changes to the splitter
+            self.splitter.data_a = self.data1
+            self.splitter.data_b = self.data2
+
+    def swap(self):
+        self.data1, self.data2 = self.data2, self.data1
+        self.splitter.swap()
+
     @logger.catch
     def tune_and_validate(self, label):
         from .models import get_tuners, save_and_get_best_model
@@ -119,15 +147,18 @@ class Main:
         # )
 
         old_label = self.data1.current_label_
-        set_label(label, self.data1, self.data2, full_data) #, augmented_data)
+        set_label(label, self.data1, self.data2, full_data)  # , augmented_data)
+        self.data1.init_classes()
+        self.data2.init_classes()
 
-        for tuner in get_tuners(self.splitter):
+        for tuner in get_tuners(self.splitter, self.only_automl):
             tlog(f"Tuning {tuner['name']}")
             tlog._log_spaces += 4
             # tuning hyperparameters
             if hasattr(tuner["model"], "set_total_resources"):
-                tuner["model"].set_total_resources(self.splitter.get_augmented_data_size())
-                tuner["model"].set_y_probs = full_data.get_y_probs()
+                tuner["model"].set_total_resources(
+                    self.splitter.get_augmented_data_size()
+                )
             ttt = time.time()
             tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
             # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())
@@ -161,7 +192,7 @@ class Main:
             tlog()
             tlog._log_spaces -= 4
 
-        set_label(old_label, self.data1, self.data2, full_data) #, augmented_data)
+        set_label(old_label, self.data1, self.data2, full_data)  # , augmented_data)
 
 
 if __name__ == "__main__":

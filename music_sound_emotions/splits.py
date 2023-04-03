@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from sklearn.model_selection import BaseCrossValidator
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import BaseCrossValidator
 
 from .data import DataXy
 
@@ -29,18 +29,12 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
     random_state: object = None
 
     def __post_init__(self):
-        self.full_data_ = DataXy(
-            pd.concat([self.data_a.X, self.data_b.X], axis=0).reset_index(drop=True),
-            pd.concat([self.data_a.y, self.data_b.y], axis=0).reset_index(drop=True),
-            name=f"{self.data_a.name}+{self.p}⨉{self.data_b.name}"
-        )
         self.random_state = np.random.default_rng(self.random_state)
 
     def get_n_splits(self, *args, **kwargs):
         return self.base_splitter.get_n_splits(*args, **kwargs)
 
     def swap(self):
-        """Swap the two datasets"""
         self.data_a, self.data_b = self.data_b, self.data_a
 
     @property
@@ -48,7 +42,15 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
         return self.base_splitter.shuffle
 
     def get_full_data(self):
-        return self.full_data_
+        return DataXy(
+            pd.concat(
+                [self.data_a._X_backup, self.data_b._X_backup], axis=0
+            ).reset_index(drop=True),
+            pd.concat(
+                [self.data_a._y_backup, self.data_b._y_backup], axis=0
+            ).reset_index(drop=True),
+            name=f"{self.data_a.name}+{self.p}⨉{self.data_b.name}",
+        )
 
     def get_augmented_data(self, **kwargs):
         idx_a = np.arange(self.data_a.n_samples)
@@ -109,16 +111,8 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             1 for train
             2. indices for test on both datasets A and B
         """
-        k1, splitter_a, splitter_b, y_b_probs = self._init_split()
-
-        for iteration in range(k1):
-            train_a, test_a = next(splitter_a)
-            train_b, test_b = next(splitter_b)
-
-            # subsampling while keeping the proportion of the classes inferred
-            train = self._stratified_augmented_susbsample(train_a, train_b, y_b_probs)
-
-            yield train, np.concatenate([test_a, test_b + self.data_a.n_samples])
+        for train, test_a, test_b in self.custom_split():
+            yield train, np.concatenate([test_a, test_b])
 
     def custom_split(self):
         """

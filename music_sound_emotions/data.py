@@ -16,6 +16,7 @@ class DataXy:
     min_class_cardinality: int = S.N_SPLITS**2
     n_clusters: int = None
     name: str = ""
+    music_ids: list = None
 
     def __post_init__(self):
         assert (
@@ -23,11 +24,13 @@ class DataXy:
         ), f"Error, `X` and `y` should have the same number of samples, but received {self.X.shape[0]} and {self.y.shape[0]}"
         self.n_samples = self.X.shape[0]
         self.n_features = self.X.shape[1]
+        self._X_backup = self.X.copy()
         self._y_backup = self.y.copy()
         self.current_label_ = None
 
+    def init_classes(self):
         # computing classes
-        y_ = self.y[["AroMN", "ValMN"]]
+        y_ = self._y_backup[["AroMN", "ValMN"]]
         self.y_classes_ = _cluster(
             y_,
             min_cardinality=self.min_class_cardinality,
@@ -55,12 +58,22 @@ class DataXy:
         return self
 
     def get_classes(self):
+        if not hasattr(self, "y_classes_"):
+            self.init_classes()
         return self.y_classes_
 
     def get_y_probs(self):
         """returns an array where each value is substituted by the ratio between that
         value and the total number of elements in `data.get_classes`"""
         return self.y_probs_
+
+    def remove_music_ids(self):
+        if self.music_ids is not None:
+            X = self.X.drop(index=self.music_ids)
+            y = self.y.drop(index=self.music_ids)
+            return DataXy(X, y, name=self.name + "-nomusic")
+        else:
+            return self
 
 
 def load_data(normalize=True):
@@ -69,24 +82,34 @@ def load_data(normalize=True):
     while pmemo is normalized so that 0 -> -1 and 1 -> 1
     """
     iads_x = load_data_x(S.IADS_DIR, S.FEATURE_FILE)
-    iads_y = load_iads_y(S.IADSE_DIR)
-    iads_y[["ValMN", "AroMN"]] = (iads_y[["ValMN", "AroMN"]] - 1) / 4 - 1
-    iads = DataXy(*_merge(iads_x, iads_y), name="IADS")
+    iads_y, iads_category = load_iads_y(S.IADSE_DIR)
+    if normalize:
+        iads_y[["ValMN", "AroMN"]] = (iads_y[["ValMN", "AroMN"]] - 5) / 4
+    iads_x, iads_y, ids = _merge(iads_x, iads_y, return_ids_col=True)
+    music_ids = ids[
+        ids.isin(iads_category["ID"][iads_category["Category"] == "Music"])
+    ].index
+    iads = DataXy(iads_x, iads_y, music_ids=music_ids, name="IADS-E")
 
     pmemo_x = load_data_x(S.PMEMO_DIR, S.FEATURE_FILE)
     pmemo_y = load_pmemo_y(S.PMEMO_DIR[0])
-    pmemo_y[["ValMN", "AroMN"]] = pmemo_y[["ValMN", "AroMN"]] * 2 - 1
+    if normalize:
+        pmemo_y[["ValMN", "AroMN"]] = pmemo_y[["ValMN", "AroMN"]] * 2 - 1
     pmemo = DataXy(*_merge(pmemo_x, pmemo_y), name="PMEmo")
 
     return iads, pmemo
 
 
-def _merge(X, y):
+def _merge(X, y, return_ids_col=False):
     # drop_duplicates is due to the fact that I have extracted each file in PMEmo twice
     df = X.merge(y, on="ID").drop_duplicates()
+    ids = df["ID"]
     X = df[X.columns].drop(columns=["ID"])
     y = df[y.columns].drop(columns=["ID"])
-    return X, y
+    if return_ids_col:
+        return X, y, ids
+    else:
+        return X, y
 
 
 def load_data_x(dirs, fname):
@@ -108,7 +131,7 @@ def load_iads_y(iads_extended_dir):
     df = pd.read_excel(dir / "Sound Ratings.xlsx")
     df.rename(columns={"Sound ID": "ID"}, inplace=True)
     df["ID"] = df["ID"].astype(str)
-    return df[["ID", "AroMN", "AroSD", "ValMN", "ValSD"]]
+    return df[["ID", "AroMN", "AroSD", "ValMN", "ValSD"]], df[["ID", "Category"]]
 
 
 def load_pmemo_y(pmemo_dir):
