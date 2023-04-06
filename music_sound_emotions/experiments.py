@@ -35,25 +35,25 @@ def full_experiment(obj):
 
 
 if __name__ == "__main__":
-    obj = validation.Main(("IADS", "PMEmo"))
+    obj = validation.Main(("IADS-E-nomusic", "PMEmo"))
     S.RATIOS = [0.0, 1.0]
     S.AUTOML_DURATION = 8 * 3600
     obj.only_automl = False
     obj.remove_iads_music = True
     full_experiment(obj)
 
+    obj = validation.Main(("IADS-E", "PMEmo"))
+    S.RATIOS = [0.0]
+    S.AUTOML_DURATION = 8 * 3600
+    obj.only_automl = True
+    obj.remove_iads_music = False
+    full_experiment(obj)
+
     obj = validation.Main(
-        ("IADS", "PMEmo")
+        ("IADS-E-nomusic", "PMEmo")
     )  # not needed, theoretically, here for avoiding possible bugs
     S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
     S.AUTOML_DURATION = 4 * 3600
     obj.only_automl = True
     obj.remove_iads_music = True
-    full_experiment(obj)
-
-    obj = validation.Main(("IADS", "PMEmo"))
-    S.RATIOS = [0.0]
-    S.AUTOML_DURATION = 8 * 3600
-    obj.only_automl = True
-    obj.remove_iads_music = False
     full_experiment(obj)

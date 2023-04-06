@@ -80,7 +80,7 @@ def r2_score(y_true, y_pred):
 
 @dataclass
 class Main:
-    order: tuple = ("IADS", "PMEmo")
+    order: tuple = ("IADS-E", "PMEmo")
     p: float = 0.5
     only_automl: bool = False
     __remove_iads_music = False
