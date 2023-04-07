@@ -97,6 +97,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
+                tmp_folder="./autosklearn_tmp",
                 ensemble_nbest=10,
                 metric=autosklearn.metrics.mean_squared_error,
                 resampling_strategy=splitter,
