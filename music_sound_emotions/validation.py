@@ -122,12 +122,16 @@ class Main:
                 # was False, now it is True
                 self.data1_ = self.data1
                 self.data2_ = self.data2
-                self.data1 = self.data1.remove_music_ids()
-                self.data2 = self.data2.remove_music_ids()
+                for d in (self.data1, self.data2):
+                    if d.name == "IADS-E":
+                        d.remove_music_ids()
+                        d.name += "-no-music"
             else:
                 # was True, now it is False
                 self.data1 = self.data1_
                 self.data2 = self.data2_
+                for d in (self.data1, self.data2):
+                    d.name = d.name.replace("-no-music", "")
             # in any case, apply the changes to the splitter
             self.splitter.data_a = self.data1
             self.splitter.data_b = self.data2

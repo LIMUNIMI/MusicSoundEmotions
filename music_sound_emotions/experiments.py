@@ -35,7 +35,7 @@ def full_experiment(obj):
 
 
 if __name__ == "__main__":
-    obj = validation.Main(("IADS-E-nomusic", "PMEmo"))
+    obj = validation.Main(("IADS-E", "PMEmo"))
     S.RATIOS = [0.0, 1.0]
     S.AUTOML_DURATION = 8 * 3600
     obj.only_automl = False
