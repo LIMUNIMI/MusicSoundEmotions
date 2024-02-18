@@ -1,5 +1,6 @@
 import datetime
 import time
+from copy import deepcopy
 from dataclasses import dataclass
 
 import numpy as np
@@ -120,12 +121,11 @@ class Main:
             self.__remove_iads_music = newval
             if newval:
                 # was False, now it is True
-                self.data1_ = self.data1
-                self.data2_ = self.data2
+                self.data1_ = deepcopy(self.data1)
+                self.data2_ = deepcopy(self.data2)
                 for d in (self.data1, self.data2):
                     if d.name == "IADS-E":
                         d.remove_music_ids()
-                        d.name += "-no-music"
             else:
                 # was True, now it is False
                 self.data1 = self.data1_

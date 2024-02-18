@@ -68,12 +68,16 @@ class DataXy:
         return self.y_probs_
 
     def remove_music_ids(self):
+        """Removes the music ids from the dataset if `music_ids` is not None. Works in-place!"""
         if self.music_ids is not None:
-            X = self.X.drop(index=self.music_ids)
-            y = self.y.drop(index=self.music_ids)
-            return DataXy(X, y, name=self.name + "-nomusic")
+            self.X = self.X.drop(index=self.music_ids)
+            self.y = self.y.drop(index=self.music_ids)
+            current_label = self.current_label_
+            self.__post_init__()
+            self.name += "-nomusic"
+            self.current_label_ = current_label
         else:
-            return self
+            pass
 
 
 def load_data(normalize=True):
