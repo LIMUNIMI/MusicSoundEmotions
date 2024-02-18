@@ -27,9 +27,22 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
     p: float
     base_splitter: object
     random_state: object = None
+    complementary_ratios: bool = False
 
     def __post_init__(self):
         self.random_state = np.random.default_rng(self.random_state)
+        self.set_p(self.p)
+
+    def set_complementary_ratios(self, newval):
+        self.complementary_ratios = newval
+        self.set_p(self.p)
+
+    def set_p(self, p):
+        self.p = p
+        if self.complementary_ratios:
+            self.q = 1 - self.p
+        else:
+            self.q = 1.0
 
     def get_n_splits(self, *args, **kwargs):
         return self.base_splitter.get_n_splits(*args, **kwargs)
@@ -42,6 +55,14 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
         return self.base_splitter.shuffle
 
     def get_full_data(self):
+        """
+        Returns a DataXy object containing the full data from both datasets.
+        The name of the returned object is a combination of the names of the
+        two datasets, including the p and q values. Note that, however, the
+        returned object is not a mix but a full sum of the original objects. The
+        returned object is inteded to be used for being indexed by the indices of
+        `custom_split()`
+        """
         return DataXy(
             pd.concat(
                 [self.data_a._X_backup, self.data_b._X_backup], axis=0
@@ -49,41 +70,39 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             pd.concat(
                 [self.data_a._y_backup, self.data_b._y_backup], axis=0
             ).reset_index(drop=True),
-            name=f"{self.data_a.name}+{self.p}⨉{self.data_b.name}",
-        )
-
-    def get_augmented_data(self, **kwargs):
-        idx_a = np.arange(self.data_a.n_samples)
-        idx_b = np.arange(self.data_b.n_samples)
-        b_probs = self.data_b.get_y_probs()
-        augmented_idx = self._stratified_augmented_susbsample(idx_a, idx_b, b_probs)
-        return DataXy(
-            self.full_data_.X.loc[augmented_idx],
-            self.full_data_.y.loc[augmented_idx],
-            **kwargs,
+            name=f"{self.q}⨉{self.data_a.name}+{self.p}⨉{self.data_b.name}",
         )
 
     def get_augmented_data_size(self):
-        return self.data_a.n_samples + round(self.p * self.data_b.n_samples)
+        return round(self.q * self.data_a.n_samples) + round(
+            self.p * self.data_b.n_samples
+        )
 
-    def _stratified_augmented_susbsample(self, arr_a, arr_b, y_b_ratios):
+    def _stratified_augmented_susbsample(self, arr_a, arr_b, y_a_ratios, y_b_ratios):
         """
         This method takes two arrays (`arr_a` and `arr_b`) and returns a
-        single array containing `arr_a` + part of `arr_b`, according to
+        single array containing `part of arr_a` + part of `arr_b`, according to
         `self.p`.
         The sub-sampling happens according to the probability
-        distribution in `y_b_ratios`.
+        distribution in `y_a_ratios` and `y_b_ratios`.
 
         Input and output arrays are expected to contain indices. The output
-        array contains indices related to `self.full_data_`
+        array contains indices related to `self.get_full_data()`
         """
 
         assert 0 <= self.p <= 1
-        N_b = round(self.p * arr_b.shape[0])
+        assert 0 <= self.q <= 1
+
+        n_a = round(self.q * arr_a.shape[0])
+        y_a_ratios = _n(y_a_ratios[arr_a])
+        n_b = round(self.p * arr_b.shape[0])
         y_b_ratios = _n(y_b_ratios[arr_b])
 
+        arr_a = self.random_state.choice(
+            arr_a, size=n_a, replace=False, p=y_a_ratios, shuffle=False
+        )
         arr_b = self.random_state.choice(
-            arr_b, size=N_b, replace=False, p=y_b_ratios, shuffle=False
+            arr_b, size=n_b, replace=False, p=y_b_ratios, shuffle=False
         )
         arr_b += arr_a.shape[0]  # the indices are all incremented!
         return np.concatenate([arr_a, arr_b])
@@ -91,7 +110,7 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
     def _init_split(self):
         y_a = self.data_a.get_classes()
         y_b = self.data_b.get_classes()
-        # y_a_probs = self.data_a.get_y_probs()
+        y_a_probs = self.data_a.get_y_probs()
         y_b_probs = self.data_b.get_y_probs()
 
         splitter_a = self.base_splitter.split(self.data_a.X, y_a)
@@ -103,7 +122,7 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             k1 == k2
         ), "Error, the dataset objects received in conjunction with the cross-validator received generate two different number of folders"
 
-        return k1, splitter_a, splitter_b, y_b_probs
+        return k1, splitter_a, splitter_b, y_a_probs, y_b_probs
 
     def split(self, *args, **kwargs):
         """
@@ -121,16 +140,18 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             2. indices for test on dataset A
             3. indices for test on dataset B
         """
-        k1, splitter_a, splitter_b, y_b_probs = self._init_split()
+        k1, splitter_a, splitter_b, y_a_probs, y_b_probs = self._init_split()
 
         for iteration in range(k1):
             train_a, test_a = next(splitter_a)
             train_b, test_b = next(splitter_b)
 
             # subsampling while keeping the proportion of the classes inferred
-            train = self._stratified_augmented_susbsample(train_a, train_b, y_b_probs)
+            train = self._stratified_augmented_susbsample(
+                train_a, train_b, y_a_probs, y_b_probs
+            )
 
-            yield train, test_a, test_b + self.data_a.n_samples
+            yield train, test_a, test_b + test_a.shape[0]
 
 
 def _n(arr):

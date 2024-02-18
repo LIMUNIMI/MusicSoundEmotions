@@ -2,6 +2,7 @@ import datetime
 import time
 from copy import deepcopy
 from dataclasses import dataclass
+from typing import Optional
 
 import numpy as np
 import scipy
@@ -85,6 +86,8 @@ class Main:
     order: tuple = ("IADS-E", "PMEmo")
     p: float = 0.5
     only_automl: bool = False
+    noised: Optional[str] = None
+    __complementary_ratios: bool = False
     __remove_iads_music = False
 
     def __post_init__(self):
@@ -96,6 +99,11 @@ class Main:
             self.data1, self.data2 = self.data2, self.data1
         if self.order[0] == self.order[1]:
             self.data2 = self.data1
+        if self.noised is not None:
+            for d in (self.data1, self.data2):
+                if self.noised == d.name:
+                    # shuffle the y data
+                    d.y = d.y.sample(frac=1, random_state=1983).reset_index(drop=True)
         self.splitter = AugmentedStratifiedKFold(
             self.data1,
             self.data2,
@@ -107,10 +115,34 @@ class Main:
             #     n_splits=S.N_SPLITS, random_state=1983, shuffle=True
             # ),
             random_state=1992,
+            complementary_ratios=self.__complementary_ratios,
         )
 
     def _set_p(self, p):
-        self.splitter.p = p
+        self.splitter.set_p(p)
+
+    @property
+    def complementary_ratios(self):
+        return self.__complementary_ratios
+
+    @complementary_ratios.setter
+    def complementary_ratios(self, newval):
+        """Warning! use this and remove_iads_music with caution as they're not guardanteed to reset to the previous state correctly if used together!"""
+        if newval != self.__complementary_ratios:
+            self.__complementary_ratios = newval
+            self.splitter.set_complementary_ratios(newval)
+            if newval:
+                # was False, now it is True
+                self.data1_complementary_backup_ = deepcopy(self.data1)
+                self.data2_complementary_backup_ = deepcopy(self.data2)
+                k_fixed = min(self.data1.X.shape[0], self.data2.X.shape[0])
+                self.data1.truncate(k_fixed)
+                self.data2.truncate(k_fixed)
+            else:
+                self.data1 = self.data1_complementary_backup_
+                self.data2 = self.data2_complementary_backup_
+            self.splitter.data_a = self.data1
+            self.splitter.data_b = self.data2
 
     @property
     def remove_iads_music(self):
@@ -118,19 +150,20 @@ class Main:
 
     @remove_iads_music.setter
     def remove_iads_music(self, newval):
+        """Warning! use this and complementary_ratios with caution as they're not guardanteed to reset to the previous state correctly if used together!"""
         if newval != self.__remove_iads_music:
             self.__remove_iads_music = newval
             if newval:
                 # was False, now it is True
-                self.data1_ = deepcopy(self.data1)
-                self.data2_ = deepcopy(self.data2)
+                self.data1_iads_music_backup_ = deepcopy(self.data1)
+                self.data2_iads_music_backup_ = deepcopy(self.data2)
                 for d in (self.data1, self.data2):
                     if d.name == "IADS-E":
                         d.remove_music_ids()
             else:
                 # was True, now it is False
-                self.data1 = self.data1_
-                self.data2 = self.data2_
+                self.data1 = self.data1_iads_music_backup_
+                self.data2 = self.data2_iads_music_backup_
                 for d in (self.data1, self.data2):
                     d.name = d.name.replace("-no-music", "")
             # in any case, apply the changes to the splitter
@@ -146,10 +179,6 @@ class Main:
         from .models import get_tuners, save_and_get_best_model
 
         full_data = self.splitter.get_full_data()
-        # augmented_data = self.splitter.get_augmented_data(
-        #     # n_clusters=S.N_SPLITS * 2,
-        #     # min_class_cardinality=None
-        # )
 
         old_label = self.data1.current_label_
         set_label(label, self.data1, self.data2, full_data)  # , augmented_data)

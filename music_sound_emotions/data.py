@@ -86,6 +86,23 @@ class DataXy:
         else:
             pass
 
+    def truncate(self, n_samples):
+        """Truncates the dataset to `n_samples` samples"""
+
+        chosen_idx = np.random.choice(
+            np.arange(self.X.shape[0]),
+            n_samples,
+            replace=False,
+            shuffle=False,
+            p=self.y_probs_,
+        )
+        self.X = self.X.iloc[chosen_idx]
+        self.y = self.y.iloc[chosen_idx]
+
+        current_label = self.current_label_
+        self.__post_init__()
+        self.current_label_ = current_label
+
 
 def load_data(normalize=True):
     """
