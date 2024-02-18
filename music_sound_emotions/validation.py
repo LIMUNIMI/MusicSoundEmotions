@@ -68,6 +68,7 @@ def confidence(dist, conf_level=0.95):
 
 
 def set_label(label, *datasets):
+    """set the target label of the datasets"""
     for dataset in datasets:
         dataset.set_label(label)
 

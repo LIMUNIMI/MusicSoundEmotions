@@ -29,6 +29,11 @@ class DataXy:
         self.current_label_ = None
 
     def init_classes(self):
+        """Computes the classes and the probabilities of the classes. The
+        classes are computed as clusters of the y values (valence and arousal)
+        and the probabilities as the ratio between the number of elements in
+        each class and the total number of elements. These classes and
+        probabilities are only used for stratified k-fold cross-validation."""
         # computing classes
         y_ = self._y_backup[["AroMN", "ValMN"]]
         self.y_classes_ = _cluster(
@@ -45,6 +50,8 @@ class DataXy:
         self.y_probs_ = y_probs_ / y_probs_.sum()
 
     def set_label(self, label: str):
+        """Set the label of the dataset to `label`. `label` is the column used
+        as target (the y)"""
         self.current_label_ = label
         if label is None:
             self.unset_label()
