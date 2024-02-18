@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -17,11 +18,14 @@ class DataXy:
     n_clusters: int = None
     name: str = ""
     music_ids: list = None
+    random_state: Optional[int] = None
 
     def __post_init__(self):
         assert (
             self.X.shape[0] == self.y.shape[0]
         ), f"Error, `X` and `y` should have the same number of samples, but received {self.X.shape[0]} and {self.y.shape[0]}"
+        if self.random_state is None or isinstance(self.random_state, int):
+            self.random_state = np.random.default_rng(self.random_state)
         self.n_samples = self.X.shape[0]
         self.n_features = self.X.shape[1]
         self._X_backup = self.X.copy()
@@ -117,13 +121,13 @@ def load_data(normalize=True):
     music_ids = ids[
         ids.isin(iads_category["ID"][iads_category["Category"] == "Music"])
     ].index
-    iads = DataXy(iads_x, iads_y, music_ids=music_ids, name="IADS-E")
+    iads = DataXy(iads_x, iads_y, music_ids=music_ids, name="IADS-E", random_state=1970)
 
     pmemo_x = load_data_x(S.PMEMO_DIR, S.FEATURE_FILE)
     pmemo_y = load_pmemo_y(S.PMEMO_DIR[0])
     if normalize:
         pmemo_y[["ValMN", "AroMN"]] = pmemo_y[["ValMN", "AroMN"]] * 2 - 1
-    pmemo = DataXy(*_merge(pmemo_x, pmemo_y), name="PMEmo")
+    pmemo = DataXy(*_merge(pmemo_x, pmemo_y), name="PMEmo", random_state=1996)
 
     return iads, pmemo
 

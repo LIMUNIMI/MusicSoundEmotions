@@ -1,4 +1,5 @@
 import pickle
+import time
 import warnings
 from copy import deepcopy
 
@@ -97,7 +98,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
-                tmp_folder="./autosklearn_tmp",
+                tmp_folder=f"./autosklearn_tmp-{time.time()}",
                 ensemble_nbest=10,
                 metric=autosklearn.metrics.mean_squared_error,
                 resampling_strategy=splitter,
@@ -108,7 +109,9 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
             "name": "Linear",
             "model": CustomHalvingGridSearchCV(
                 estimator=_get_pipeline(
-                    ElasticNetCV(n_alphas=100, max_iter=10**6, tol=1e-5, cv=5)
+                    ElasticNetCV(
+                        n_alphas=100, max_iter=10**6, tol=1e-5, cv=deepcopy(splitter)
+                    )
                 ),
                 param_grid=dict(
                     pca__n_components=np.linspace(0.8, 1 - 1e-15, 10),
@@ -169,9 +172,6 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
 
 
 class CustomHalvingGridSearchCV(HalvingGridSearchCV):
-    def set_y_probs(self, y_probs):
-        self.y_probs = y_probs
-
     def set_total_resources(self, total_resources):
         self.total_resources = total_resources
 
@@ -182,22 +182,15 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
             self.random_state = np.random.default_rng(self.random_state)
 
         scorer = get_scorer(self.scoring)
-        tot = getattr(self, 'total_resources', X.shape[0])
+        tot = getattr(self, "total_resources", X.shape[0])
         resources = self.min_resources
         best_params = list(ParameterGrid(self.param_grid))
         tlog(f"Total parameter sets: {len(best_params)}")
         i = 0
-        with Parallel(n_jobs=self.n_jobs, max_nbytes='10M') as parallel:
+        with Parallel(n_jobs=self.n_jobs, max_nbytes="10M") as parallel:
             while resources <= tot:
                 i += 1
                 scores = []
-                idx = self.random_state.choice(
-                    np.arange(tot),
-                    size=resources,
-                    replace=False,
-                    p=getattr(self, 'y_probs', None),
-                    shuffle=True,
-                )
 
                 def _cv_valid(params):
                     with warnings.catch_warnings():
@@ -206,8 +199,13 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
                         for train, test in self.cv.split(X, y):
                             estimator = clone(self.estimator)
                             estimator.set_params(**params)
-                            train = train[np.isin(train, idx)]
-                            estimator.fit(X[train], y[train])
+                            idx = self.random_state.choice(
+                                train,
+                                size=resources,
+                                replace=False,
+                                shuffle=True,
+                            )
+                            estimator.fit(X[idx], y[idx])
                             score = scorer(estimator, X[test], y[test])
                             cv_scores.append(score)
                         return np.mean(cv_scores)

@@ -29,6 +29,9 @@ experiment = "python -m music_sound_emotions.experiments"
 # post_install = {composite = ["install_pip", "install_deps"]}
 
 [tool.pdm.dev-dependencies]
+dev = [
+    "ipdb>=0.13.13",
+]
 [[tool.pdm.source]]
 url = "https://pypi.anaconda.org/intel/simple"
 verify_ssl = true
