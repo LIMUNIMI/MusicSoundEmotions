@@ -3,6 +3,7 @@
 ### Reproduce
 
 #### Using `pdm`
+
 This project was developed using pdm and intel MKL libraries. To setup the same
 identical environment, do as follows:
 
@@ -13,11 +14,14 @@ identical environment, do as follows:
 5. Download OpenSmile 3.0.1
 6. Download and extract the datasets each in a different directory (IADS-E, IADS-2, PMEmo)
 7. Modify `music_sound_emotions/settings.py` to match your paths:
-  * the path to OpenSmile root directory
-  * the paths to the datasets root directories
+
+- the path to OpenSmile root directory
+- the paths to the datasets root directories
+
 8. From the project root run:
-  * `pdm features` to extract features
-  * `pdm experiment` to reproduce our experiments
+
+- `pdm features` to extract features
+- `pdm experiment` to reproduce our experiments
 
 #### Using `API`
 
@@ -29,15 +33,16 @@ For this approach, see below.
 ### API
 
 To use this code into your own, just install it with pip:
-  `pip install --ignore-requires-python git+https://github.com/LIMUNIMI/MusicSoundEmotions.git`
+`pip install --ignore-requires-python git+https://github.com/LIMUNIMI/MusicSoundEmotions.git`
 
-Youcan perform feature extraction using `python -m music_sound_emotions.features`.
+You can perform feature extraction using `python -m music_sound_emotions.features`.
 
 You can perform the experiments using `python -m music_sound_emotions.experiments`.
 
 You can run one single experiment using `python -m
 music_sound_emotions.validation tune_and_validate --label=<LABEL> --p=<P>`, where:
-  * `P` must be float between 0 and 1 and corresponds to how much of IADS is added
-    with PMEmo
-  * `LABEL` must be one of `AroMN`, `ValMN`, `AroSD`, `ValSD` and correspond to
-    Arousal/Valence mean/standard deviation.
+
+- `P` must be float between 0 and 1 and corresponds to how much of IADS is added
+  with PMEmo
+- `LABEL` must be one of `AroMN`, `ValMN`, `AroSD`, `ValSD` and correspond to
+  Arousal/Valence mean/standard deviation.
