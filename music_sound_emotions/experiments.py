@@ -5,8 +5,9 @@ from .utils import telegram_notify
 
 def full_experiment(obj):
     for p in S.RATIOS:
-        S.tlog(f"Ratio: {obj.data1.name} + {p}{obj.data2.name}")
         obj._set_p(p)
+        q = obj.splitter.q
+        S.tlog(f"Ratio: {q}{obj.data1.name} + {p}{obj.data2.name}")
         S.tlog._log_spaces += 4
         for label in S.LABELS:
             S.tlog(f"Label: {label}")
@@ -20,8 +21,9 @@ def full_experiment(obj):
     telegram_notify("Swapping data!")
     obj.swap()
     for p in S.RATIOS[:-1]:  # ratio p=1 is identical...
-        S.tlog(f"Ratio: {obj.data1.name} + {p}{obj.data2.name}")
         obj._set_p(p)
+        q = obj.splitter.q
+        S.tlog(f"Ratio: {q}{obj.data1.name} + {p}{obj.data2.name}")
         S.tlog._log_spaces += 4
         for label in S.LABELS:
             S.tlog(f"Label: {label}")
@@ -105,7 +107,6 @@ if __name__ == "__main__":
 
     # how much the addition of noisy data influence the performance?
     # Table 5 of the paper (total number of data kept constant)
-    # TODO: implement this dataset name
     obj = validation.Main(
         ("IADS-E-nomusic", "PMEmo"), noised="PMEmo"
     )  # not needed, theoretically, here for avoiding possible bugs
@@ -118,7 +119,6 @@ if __name__ == "__main__":
 
     # how much the addition of noisy data influence the performance?
     # Table 6 of the paper (total number of data kept constant)
-    # TODO: implement this dataset name
     obj = validation.Main(
         ("IADS-E-nomusic", "PMEmo"), noised="IADS-E-nomusic"
     )  # not needed, theoretically, here for avoiding possible bugs
