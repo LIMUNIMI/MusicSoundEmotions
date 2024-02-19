@@ -188,11 +188,7 @@ class Main:
         for tuner in get_tuners(self.splitter, self.only_automl):
             tlog(f"Tuning {tuner['name']}")
             tlog._log_spaces += 4
-            # tuning hyperparameters
-            if hasattr(tuner["model"], "set_total_resources"):
-                tuner["model"].set_total_resources(
-                    self.splitter.get_augmented_data_size()
-                )
+
             ttt = time.time()
             tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
             # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())

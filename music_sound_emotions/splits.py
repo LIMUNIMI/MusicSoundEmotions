@@ -71,6 +71,7 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
                 [self.data_a._y_backup, self.data_b._y_backup], axis=0
             ).reset_index(drop=True),
             name=f"{self.q}⨉{self.data_a.name}+{self.p}⨉{self.data_b.name}",
+            random_state=self.data_a.random_state,
         )
 
     def get_augmented_data_size(self):

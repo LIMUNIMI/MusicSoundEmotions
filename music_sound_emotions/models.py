@@ -9,16 +9,12 @@ from autosklearn.regression import AutoSklearnRegressor
 from joblib import Parallel, delayed
 from sklearn.base import clone
 from sklearn.decomposition import PCA
-from sklearn.experimental import (
-    enable_halving_search_cv,
-)  # here to eable halving grid search
+from sklearn.experimental import \
+    enable_halving_search_cv  # here to eable halving grid search
 from sklearn.linear_model import ElasticNetCV
 from sklearn.metrics import get_scorer
-from sklearn.model_selection import (
-    BaseCrossValidator,
-    HalvingGridSearchCV,
-    ParameterGrid,
-)
+from sklearn.model_selection import (BaseCrossValidator, HalvingGridSearchCV,
+                                     ParameterGrid)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
@@ -84,7 +80,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
         scoring="neg_root_mean_squared_error",
         random_state=1992,
         refit=False,
-        min_resources=2 * S.N_SPLITS**2,
+        min_resources=0.1,
         n_jobs=-1,
         verbose=3,
     )
@@ -172,8 +168,6 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
 
 
 class CustomHalvingGridSearchCV(HalvingGridSearchCV):
-    def set_total_resources(self, total_resources):
-        self.total_resources = total_resources
 
     def fit(self, X, y):
         X = np.asarray(X)
@@ -182,7 +176,7 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
             self.random_state = np.random.default_rng(self.random_state)
 
         scorer = get_scorer(self.scoring)
-        tot = getattr(self, "total_resources", X.shape[0])
+        tot = 1.0  # getattr(self, "total_resources", X.shape[0])
         resources = self.min_resources
         best_params = list(ParameterGrid(self.param_grid))
         tlog(f"Total parameter sets: {len(best_params)}")
@@ -199,13 +193,10 @@ class CustomHalvingGridSearchCV(HalvingGridSearchCV):
                         for train, test in self.cv.split(X, y):
                             estimator = clone(self.estimator)
                             estimator.set_params(**params)
-                            idx = self.random_state.choice(
-                                train,
-                                size=resources,
-                                replace=False,
-                                shuffle=True,
-                            )
-                            estimator.fit(X[idx], y[idx])
+                            res = round(len(train) * resources)
+                            train = train[:res]
+                            test = test[:res]
+                            estimator.fit(X[train], y[train])
                             score = scorer(estimator, X[test], y[test])
                             cv_scores.append(score)
                         return np.mean(cv_scores)
