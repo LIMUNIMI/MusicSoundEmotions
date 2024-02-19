@@ -1,5 +1,5 @@
-from pprint import pprint
 from pathlib import Path
+from pprint import pprint
 
 #############################################
 ############# Configuration #################

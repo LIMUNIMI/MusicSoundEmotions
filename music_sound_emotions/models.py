@@ -94,7 +94,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
                 n_jobs=-1,
                 seed=8229,
                 memory_limit=10000,
-                tmp_folder=f"./autosklearn_tmp-{time.time()}",
+                tmp_folder=f"./autosklearn_tmp-{int(time.time() * 1000)}",
                 ensemble_nbest=10,
                 metric=autosklearn.metrics.mean_squared_error,
                 resampling_strategy=splitter,
@@ -105,9 +105,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
             "name": "Linear",
             "model": CustomHalvingGridSearchCV(
                 estimator=_get_pipeline(
-                    ElasticNetCV(
-                        n_alphas=100, max_iter=10**6, tol=1e-5, cv=deepcopy(splitter)
-                    )
+                    ElasticNetCV(n_alphas=100, max_iter=10**6, tol=1e-5, cv=5)
                 ),
                 param_grid=dict(
                     pca__n_components=np.linspace(0.8, 1 - 1e-15, 10),
