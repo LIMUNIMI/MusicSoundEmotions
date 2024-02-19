@@ -1,3 +1,5 @@
 .venv
 *~
 telegram.json
+__pycache__
+.pdm.toml

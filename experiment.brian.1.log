@@ -1,263 +1,0 @@
-[33mVirtualenv [0m[32m/home/fedes/music_sound_emotions/[0m[32m.venv[0m[33m is reused.[0m
-Loading data
-Ratio: IADS-E-no-music + 0.0PMEmo
-    Label: AroMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2023-04-08 13:10:07,669:Client-AutoML(8229):e7ae8f3c-d5fd-11ed-9093-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (28795.646526)
-[WARNING] [2023-04-08 13:10:07,669:Client-AutoML(8229):e7ae8f3c-d5fd-11ed-9093-b499bab8ef8a] Capping the per_run_time_limit to 14397.0 to have time for a least 2 models in each process.
-[WARNING] [2023-04-08 13:10:33,428:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2023-04-08 13:10:45,735:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:10:48,553:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:10:54,809:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:10:56,941:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:11:07,855:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:11:11,326:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:11:26,693:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:11:30,519:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:12:17,860:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-08 13:12:53,315:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-Time:  28825.78550171852
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [02:24, 144.60s/it]Cross-validating: 2it [04:45, 142.71s/it]Cross-validating: 3it [07:08, 142.50s/it]Cross-validating: 4it [09:29, 141.94s/it]Cross-validating: 5it [11:52, 142.30s/it]Cross-validating: 5it [11:52, 142.45s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            6.05e-01 ± 4.31e-02
-            1.85e-01 ± 1.38e-02
-            1.46e-01 ± 9.04e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            2.50e-01 ± 3.19e-02
-            3.20e-01 ± 9.28e-03
-            2.61e-01 ± 9.30e-03
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  501.0652332305908
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [00:27, 27.70s/it]Cross-validating: 2it [00:59, 29.95s/it]Cross-validating: 3it [01:26, 28.68s/it]Cross-validating: 4it [01:55, 29.02s/it]Cross-validating: 5it [02:24, 28.94s/it]Cross-validating: 5it [02:24, 28.95s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            4.68e-01 ± 9.09e-02
-            2.14e-01 ± 2.06e-02
-            1.71e-01 ± 1.64e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            -1.96e+00 ± 1.77e+00
-            6.17e-01 ± 1.87e-01
-            4.13e-01 ± 1.00e-01
-            
-        Tuning SVM
-            Total parameter sets: 52000
-/home/fedes/music_sound_emotions/.venv/lib/python3.9/site-packages/joblib/externals/loky/process_executor.py:700: UserWarning: A worker stopped while some jobs were given to the executor. This can be caused by a too short worker timeout or by a memory leak.
-  warnings.warn(
-Time:  16772.34109354019
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [00:02,  2.47s/it]Cross-validating: 2it [00:04,  2.47s/it]Cross-validating: 3it [00:07,  2.42s/it]Cross-validating: 4it [00:09,  2.38s/it]Cross-validating: 5it [00:11,  2.36s/it]Cross-validating: 5it [00:11,  2.39s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            5.72e-01 ± 3.35e-02
-            1.92e-01 ± 1.03e-02
-            1.51e-01 ± 8.05e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            4.08e-02 ± 2.08e-02
-            3.62e-01 ± 1.46e-02
-            2.99e-01 ± 1.05e-02
-            
---------
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2023-04-09 02:13:05,041:Client-AutoML(8229):49cf4abb-d66b-11ed-9093-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (28796.124830)
-[WARNING] [2023-04-09 02:13:05,041:Client-AutoML(8229):49cf4abb-d66b-11ed-9093-b499bab8ef8a] Capping the per_run_time_limit to 14398.0 to have time for a least 2 models in each process.
-[WARNING] [2023-04-09 02:13:29,017:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2023-04-09 02:13:47,857:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:13:51,660:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:13:58,603:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:14:12,617:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:14:15,707:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:14:33,609:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:15:02,237:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:15:24,220:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:16:10,802:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:17:38,234:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:18:06,452:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:18:16,858:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2023-04-09 02:18:53,796:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-Time:  28812.836287498474
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [04:45, 285.45s/it]Cross-validating: 2it [09:26, 282.88s/it]Cross-validating: 3it [14:01, 279.49s/it]Cross-validating: 4it [18:38, 278.47s/it]Cross-validating: 5it [23:19, 279.21s/it]Cross-validating: 5it [23:19, 279.88s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            4.16e-01 ± 3.01e-02
-            2.71e-01 ± 1.15e-02
-            2.18e-01 ± 9.06e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            -4.47e-01 ± 1.50e-01
-            3.89e-01 ± 3.16e-02
-            3.28e-01 ± 2.95e-02
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  344.23117184638977
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [00:18, 18.63s/it]Cross-validating: 2it [00:31, 15.11s/it]Cross-validating: 3it [00:43, 13.67s/it]Cross-validating: 4it [00:56, 13.36s/it]Cross-validating: 5it [01:08, 13.11s/it]Cross-validating: 5it [01:08, 13.76s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            2.53e-01 ± 8.61e-02
-            3.06e-01 ± 1.98e-02
-            2.41e-01 ± 1.22e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            -1.60e+01 ± 8.13e+00
-            1.32e+00 ± 4.11e-01
-            8.61e-01 ± 2.14e-01
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  16733.814406633377
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [00:02,  2.22s/it]Cross-validating: 2it [00:04,  2.22s/it]Cross-validating: 3it [00:06,  2.22s/it]Cross-validating: 4it [00:08,  2.22s/it]Cross-validating: 5it [00:11,  2.21s/it]Cross-validating: 5it [00:11,  2.22s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            -1.95e-02 ± 1.30e-02
-            3.58e-01 ± 9.42e-03
-            2.95e-01 ± 6.66e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            -6.47e-01 ± 1.09e-01
-            4.14e-01 ± 1.41e-02
-            3.57e-01 ± 1.58e-02
-            
---------
---------
-Ratio: IADS-E-no-music + 1.0PMEmo
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2023-04-09 15:22:46,812:Client-AutoML(8229):9a84bd80-d6d9-11ed-9093-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (28795.367385)
-[WARNING] [2023-04-09 15:22:46,812:Client-AutoML(8229):9a84bd80-d6d9-11ed-9093-b499bab8ef8a] Capping the per_run_time_limit to 14397.0 to have time for a least 2 models in each process.
-[WARNING] [2023-04-09 15:23:10,971:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  28806.507482290268
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [19:41, 1181.59s/it]Cross-validating: 2it [39:20, 1180.10s/it]Cross-validating: 3it [58:58, 1179.14s/it]Cross-validating: 4it [1:18:31, 1176.59s/it]Cross-validating: 5it [1:38:07, 1176.45s/it]Cross-validating: 5it [1:38:07, 1177.51s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            4.90e-01 ± 2.88e-02
-            2.53e-01 ± 1.31e-02
-            1.84e-01 ± 1.12e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            7.75e-01 ± 4.86e-02
-            1.53e-01 ± 2.62e-02
-            8.15e-02 ± 1.44e-02
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  318.6909182071686
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [00:11, 11.60s/it]Cross-validating: 2it [00:20,  9.91s/it]Cross-validating: 3it [00:29,  9.45s/it]Cross-validating: 4it [00:38,  9.27s/it]Cross-validating: 5it [00:46,  8.95s/it]Cross-validating: 5it [00:46,  9.32s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            2.95e-01 ± 8.19e-02
-            2.98e-01 ± 2.48e-02
-            2.32e-01 ± 1.34e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            4.44e-01 ± 8.00e-02
-            2.41e-01 ± 2.87e-02
-            1.96e-01 ± 2.63e-02
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  17094.91653060913
-            Cross-validating best estimator
-Cross-validating: 0it [00:00, ?it/s]Cross-validating: 1it [00:10, 10.31s/it]Cross-validating: 2it [00:21, 10.80s/it]Cross-validating: 3it [00:32, 10.69s/it]Cross-validating: 4it [00:42, 10.52s/it]Cross-validating: 5it [00:52, 10.31s/it]Cross-validating: 5it [00:52, 10.44s/it]
-            ___________________
-            Obtained metrics for IADS-E-no-music
-               r2, RMSE, MAE
-            4.61e-01 ± 2.63e-02
-            2.61e-01 ± 1.25e-02
-            1.91e-01 ± 1.40e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            7.30e-01 ± 3.59e-02
-            1.68e-01 ± 2.10e-02
-            8.49e-02 ± 1.32e-02
-            
---------
---------
