@@ -67,7 +67,7 @@ if __name__ == "__main__":
     obj.only_automl = True
     obj.remove_iads_music = True
     obj.complementary_ratios = False
-    full_experiment(obj)
+    full
 
     # how much of each dataset should we add (baseline with noise)?
     # Table 3 of the paper

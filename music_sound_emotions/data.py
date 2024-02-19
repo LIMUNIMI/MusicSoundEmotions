@@ -93,11 +93,12 @@ class DataXy:
     def truncate(self, n_samples):
         """Truncates the dataset to `n_samples` samples"""
 
+        if not hasattr(self, "y_probs_"):
+            self.init_classes()
         chosen_idx = np.random.choice(
             np.arange(self.X.shape[0]),
             n_samples,
             replace=False,
-            shuffle=False,
             p=self.y_probs_,
         )
         self.X = self.X.iloc[chosen_idx]
