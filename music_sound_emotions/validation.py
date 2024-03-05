@@ -102,8 +102,9 @@ class Main:
         if self.noised is not None:
             for d in (self.data1, self.data2):
                 if self.noised == d.name:
-                    # shuffle the y data
-                    d.y = d.y.sample(frac=1, random_state=1983).reset_index(drop=True)
+                    # instead of shuffling the y data
+                    # generate new y data between each column's min and max
+                    d.y[:] = np.random.uniform(d.y.min(), d.y.max(), d.y.shape)
         self.splitter = AugmentedStratifiedKFold(
             self.data1,
             self.data2,
