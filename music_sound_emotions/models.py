@@ -1,3 +1,4 @@
+import os
 import pickle
 import time
 import warnings
@@ -81,7 +82,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
         random_state=1992,
         refit=False,
         min_resources=0.1,
-        n_jobs=-2,
+        n_jobs=os.cpu_count() - 1,
         verbose=3,
     )
     tuners = [
@@ -91,7 +92,7 @@ def get_tuners(splitter: AugmentedStratifiedKFold, only_automl=False) -> list:
                 # smac_scenario_args={"runcount_limit": 4},
                 # initial_configurations_via_metalearning=2,
                 time_left_for_this_task=S.AUTOML_DURATION,
-                n_jobs=-2,
+                n_jobs=os.cpu_count() - 1,  # autosklearn doesn't support -2
                 seed=8229,
                 memory_limit=10000,
                 tmp_folder=f"./autosklearn_tmp-{int(time.time() * 1000)}",
