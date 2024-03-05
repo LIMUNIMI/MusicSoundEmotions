@@ -1,3 +1,4 @@
+import datetime
 from pathlib import Path
 from pprint import pprint
 
@@ -47,7 +48,12 @@ class Tlog:
             print_func = print
         else:
             print_func = pprint
-        print_func(" " * self._log_spaces + message)
+        print_func(
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            + ": "
+            + " " * self._log_spaces
+            + message
+        )
 
 
 tlog = Tlog()

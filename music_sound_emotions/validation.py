@@ -35,6 +35,7 @@ def cross_validate(
     old_label = full_data.current_label_
     set_label(label, full_data)
     X, y = full_data.X.to_numpy(), full_data.y.to_numpy()
+    splitter.proportional_test_folds = False
     for train, test_a, test_b in tqdm(splitter.custom_split(), desc="Cross-validating"):
         if isinstance(model, AutoSklearnRegressor):
             model.refit(X[train], y[train])
@@ -52,6 +53,7 @@ def cross_validate(
             metrics_a[i].append(metric(y_a_true, y_a_cap))
             metrics_b[i].append(metric(y_b_true, y_b_cap))
 
+    splitter.proportional_test_folds = True
     metrics_a = [(np.mean(m), confidence(m)) for m in metrics_a]
     metrics_b = [(np.mean(m), confidence(m)) for m in metrics_b]
     set_label(old_label, full_data)
@@ -104,7 +106,9 @@ class Main:
                 if self.noised == d.name:
                     # instead of shuffling the y data
                     # generate new y data between each column's min and max
-                    d.y[:] = np.random.uniform(d.y.min(), d.y.max(), d.y.shape)
+                    rng = np.random.default_rng(2024)
+                    d.y[:] = rng.uniform(d.y.min(), d.y.max(), d.y.shape)
+
         self.splitter = AugmentedStratifiedKFold(
             self.data1,
             self.data2,
@@ -186,6 +190,14 @@ class Main:
         self.data1.init_classes()
         self.data2.init_classes()
 
+        # compute l1 norm of data1.x - data2.x and data1.y - data2.y
+        # then sort by the l1 norm of the two and print the 5 list values
+        # m = min(self.data1.X.shape[0], self.data2.X.shape[0])
+        # x_diff = np.abs(self.data1.X[:m].to_numpy() - self.data2.X[:m].to_numpy()).sum(
+        #     axis=1
+        # )
+        # y_diff = np.abs(self.data1.y[:m].to_numpy() - self.data2.y[:m].to_numpy())
+        # print(f"Most similar samples: {diff.nsmallest(5)}")
         for tuner in get_tuners(self.splitter, self.only_automl):
             tlog(f"Tuning {tuner['name']}")
             tlog._log_spaces += 4
@@ -193,12 +205,13 @@ class Main:
             ttt = time.time()
             tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
             # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())
-            print("Time: ", time.time() - ttt)
+            print("Needed time for optimizing the model: ", time.time() - ttt)
             telegram_notify(f"{tuner['name']} done in {(time.time() - ttt)/60} minutes")
             # cross-validate best result
             tlog("Cross-validating best estimator")
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filepath = f"{tuner['name']}_{self.splitter.p:.2f}-{timestamp}.pickle"
+            ttt = time.time()
             data1_res, data2_res = cross_validate(
                 save_and_get_best_model(tuner, filepath),
                 self.splitter,
@@ -208,6 +221,9 @@ class Main:
                     metrics.mean_absolute_error,
                 ],
                 label,
+            )
+            print(
+                "Needed time for cross-validating the best model: ", time.time() - ttt
             )
 
             tlog("___________________")

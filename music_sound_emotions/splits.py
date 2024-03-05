@@ -28,6 +28,7 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
     base_splitter: object
     random_state: object = None
     complementary_ratios: bool = False
+    proportional_test_folds: bool = True
 
     def __post_init__(self):
         self.random_state = np.random.default_rng(self.random_state)
@@ -106,7 +107,9 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             arr_b, size=n_b, replace=False, p=y_b_ratios, shuffle=False
         )
         arr_b += arr_a.shape[0]  # the indices are all incremented!
-        return np.concatenate([arr_a, arr_b])
+        # print("Using", arr_a.shape[0], "indices from", self.data_a.name)
+        # print("Using", arr_b.shape[0], "indices from", self.data_b.name)
+        return arr_a, arr_b
 
     def _init_split(self):
         y_a = self.data_a.get_classes()
@@ -141,18 +144,29 @@ class AugmentedStratifiedKFold(BaseCrossValidator):
             2. indices for test on dataset A
             3. indices for test on dataset B
         """
+        # y_a_probs and y_b_probs are used to keep the proportion of the classes
+        # and are referred to the whole datasets
         k1, splitter_a, splitter_b, y_a_probs, y_b_probs = self._init_split()
 
         for iteration in range(k1):
+            # train_a, test_a, train_b, test_b are indices refererred to the whole
+            # datasets
             train_a, test_a = next(splitter_a)
             train_b, test_b = next(splitter_b)
 
             # subsampling while keeping the proportion of the classes inferred
-            train = self._stratified_augmented_susbsample(
+            train_a, train_b = self._stratified_augmented_susbsample(
                 train_a, train_b, y_a_probs, y_b_probs
             )
+            train = np.concatenate([train_a, train_b])
+            if self.proportional_test_folds:
+                test_a, test_b = self._stratified_augmented_susbsample(
+                    test_a, test_b, y_a_probs, y_b_probs
+                )
+            else:
+                test_b += train_a.shape[0]
 
-            yield train, test_a, test_b + test_a.shape[0]
+            yield train, test_a, test_b
 
 
 def _n(arr):

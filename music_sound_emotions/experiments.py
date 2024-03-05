@@ -40,33 +40,15 @@ def full_experiment(obj, half=False):
 
 
 if __name__ == "__main__":
-    print("what is better? IADS-E no music, PMEmo, or IADS-E no music + PMEmo?")
-    # Table 1 of the paper
-    obj = validation.Main(("IADS-E", "PMEmo"))
-    S.RATIOS = [0.0, 1.0]
-    S.AUTOML_DURATION = 6 * 3600
-    obj.only_automl = False
-    obj.remove_iads_music = True
-    obj.complementary_ratios = False
-    full_experiment(obj)
-
-    print("need to recompute for IADS with music for SOTA comparison")
-    # Table 2 of the paper for IADS-E with music
-    obj = validation.Main(("IADS-E", "PMEmo"))
-    S.RATIOS = [0.0]
-    S.AUTOML_DURATION = 6 * 3600
-    obj.only_automl = True
-    obj.remove_iads_music = False
-    obj.complementary_ratios = False
-    full_experiment(obj)
-
-    print("HOW MUCH OF EACH DATASET SHOULD WE ADD?")
+    print(
+        "HOW MUCH OF EACH DATASET SHOULD WE ADD (BASELINE WITH IADS-E-NOMUSIC SHUFFLED LABELS)?"
+    )
     # Table 3 of the paper
     obj = validation.Main(
-        ("IADS-E-nomusic", "PMEmo"), noised="IADS-E-nomusic"
+        ("IADS-E", "PMEmo"), noised="IADS-E"
     )  # not needed, theoretically, here for avoiding possible bugs
     S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
-    S.AUTOML_DURATION = 3 * 3600
+    S.AUTOML_DURATION = int(1.5 * 3600)
     obj.only_automl = True
     obj.remove_iads_music = True
     obj.complementary_ratios = False
@@ -77,67 +59,57 @@ if __name__ == "__main__":
     )
     # Table 3 of the paper
     obj = validation.Main(
-        ("IADS-E-nomusic", "PMEmo"), noised="PMEmo"
+        ("IADS-E", "PMEmo"), noised="PMEmo"
     )  # not needed, theoretically, here for avoiding possible bugs
     S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
-    S.AUTOML_DURATION = 3 * 3600
+    S.AUTOML_DURATION = int(1.5 * 3600)
     obj.only_automl = True
     obj.remove_iads_music = True
+    obj.complementary_ratios = False
+    full_experiment(obj)
+
+    print("HOW MUCH OF EACH DATASET SHOULD WE ADD?")
+    # Table 3 of the paper
+    obj = validation.Main(
+        ("IADS-E", "PMEmo")
+    )  # not needed, theoretically, here for avoiding possible bugs
+    S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
+    S.AUTOML_DURATION = int(1.5 * 3600)
+    obj.only_automl = True
+    obj.remove_iads_music = True
+    obj.complementary_ratios = False
+    full_experiment(obj)
+
+    print("WHAT IS BETTER? IADS-E NO MUSIC, PMEmo, OR IADS-E NO MUSIC + PMEmo?")
+    # Table 1 of the paper
+    obj = validation.Main(("IADS-E", "PMEmo"))
+    S.RATIOS = [0.0, 1.0]
+    S.AUTOML_DURATION = 3 * 3600
+    obj.only_automl = False
+    obj.remove_iads_music = True
+    obj.complementary_ratios = False
+    full_experiment(obj)
+
+    print("NEED TO RECOMPUTE FOR IADS WITH MUSIC FOR SOTA COMPARISON")
+    # Table 2 of the paper for IADS-E with music
+    obj = validation.Main(("IADS-E", "PMEmo"))
+    S.RATIOS = [0.0]
+    S.AUTOML_DURATION = 3 * 3600
+    obj.only_automl = True
+    obj.remove_iads_music = False
     obj.complementary_ratios = False
     full_experiment(obj)
 
     print(
-        "HOW MUCH OF EACH DATASET SHOULD WE ADD (BASELINE WITH IADS-E-NOMUSIC SHUFFLED LABELS)?"
+        "HOW MUCH THE MIX OF MUSIC AND AUDIO INFLUENCES THE PERFORMANCE (KEEP TOT DATA CONSTANT)?"
     )
-    # Table 3 of the paper
-    obj = validation.Main(
-        ("IADS-E-nomusic-noise", "PMEmo")
-    )  # not needed, theoretically, here for avoiding possible bugs
-    S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
-    S.AUTOML_DURATION = 3 * 3600
-    obj.only_automl = True
-    obj.remove_iads_music = True
-    obj.complementary_ratios = False
-    full_experiment(obj)
-
-    print("HOW MUCH THE ADDITION OF NEW DATA INFLUENCE THE PERFORMANCE?")
     # Table 4 of the paper (total number of data kept constant)
     obj = validation.Main(
-        ("IADS-E-nomusic", "PMEmo")
+        ("IADS-E", "PMEmo")
     )  # not needed, theoretically, here for avoiding possible bugs
     S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
-    S.AUTOML_DURATION = 3 * 3600
+    S.AUTOML_DURATION = int(1.5 * 3600)
     obj.only_automl = True
     obj.remove_iads_music = True
     obj.complementary_ratios = True
     full_experiment(obj, half=True)
-
-    # print(
-    #     "HOW MUCH THE ADDITION OF NOISY DATA INFLUENCE THE PERFORMANCE (BASELINE WITH IADS-E-NOMUSIC SHUFFLED LABELS)?"
-    # )
-    # # Table 5 of the paper (total number of data kept constant)
-    # obj = validation.Main(
-    #     ("IADS-E-nomusic", "PMEmo")
-    # )  # not needed, theoretically, here for avoiding possible bugs
-    # S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
-    # S.AUTOML_DURATION = 3 * 3600
-    # S.AUTOML_DURATION = DBG_TIME
-    # obj.only_automl = True
-    # obj.remove_iads_music = True
-    # obj.complementary_ratios = True
-    # full_experiment(obj)
-    #
-    # print(
-    #     "HOW MUCH THE ADDITION OF NOISY DATA INFLUENCE THE PERFORMANCE (BASELINE WITH IADS-E-NOMUSIC SHUFFLED LABELS)?"
-    # )
-    # # Table 6 of the paper (total number of data kept constant)
-    # obj = validation.Main(
-    #     ("IADS-E-nomusic", "PMEmo")
-    # )  # not needed, theoretically, here for avoiding possible bugs
-    # S.RATIOS = [0.0, 0.25, 0.5, 0.75, 1.0]
-    # S.AUTOML_DURATION = 3 * 3600
-    # S.AUTOML_DURATION = DBG_TIME
-    # obj.only_automl = True
-    # obj.remove_iads_music = True
-    # obj.complementary_ratios = True
-    # full_experiment(obj)
