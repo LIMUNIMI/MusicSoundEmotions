@@ -204,6 +204,7 @@ class Main:
 
             ttt = time.time()
             tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
+            time.sleep(300)
             # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())
             print("Needed time for optimizing the model: ", time.time() - ttt)
             telegram_notify(f"{tuner['name']} done in {(time.time() - ttt)/60} minutes")
@@ -225,6 +226,7 @@ class Main:
             print(
                 "Needed time for cross-validating the best model: ", time.time() - ttt
             )
+            time.sleep(60)
 
             tlog("___________________")
             tlog(f"Obtained metrics for {self.data1.name}")
