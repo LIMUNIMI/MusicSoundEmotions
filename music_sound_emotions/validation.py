@@ -18,6 +18,48 @@ from .splits import AugmentedStratifiedKFold, DataXy
 from .utils import logger, telegram_notify
 
 
+def _monitor_children_processes(min_time_limit, max_time_limit):
+    """
+    Monitor the children processes of this process and kill them if they take
+    too long. This spawns a new process which does nothing until `min_time_limit`
+    is reached, then it starts waiting for the children processes of this process
+    (the parent, not the monitor). If the children processes are still running
+    after `max_time_limit`, it kills them with -9.
+    """
+    import psutil
+    from multiprocessing import Process
+
+    def monitor_children_processes(parent):
+        pid = psutil.Process().pid
+        start_time = time.time()
+        while True:
+            if time.time() - start_time < min_time_limit:
+                time.sleep(60)
+                continue
+            children = parent.children()
+            if len(children) > 1:
+                for child in children:
+                    # avoid killing this same process
+                    if child.pid != pid:
+                        try:
+                            remaining_time = max_time_limit - (time.time() - start_time)
+                            if remaining_time < 0:
+                                # kill with -9
+                                child.kill()
+                            child.wait(timeout=remaining_time)
+                        except psutil.TimeoutExpired:
+                            # kill with -9
+                            child.kill()
+                        except psutil.NoSuchProcess:
+                            pass
+            else:
+                break
+
+    # run the monitor in a new process
+    monitor = Process(target=monitor_children_processes, args=(psutil.Process(),))
+    return monitor
+
+
 def cross_validate(
     model,
     splitter: AugmentedStratifiedKFold,
@@ -203,6 +245,10 @@ class Main:
             tlog._log_spaces += 4
 
             ttt = time.time()
+            monitor = _monitor_children_processes(
+                S.AUTOML_DURATION - 300, S.AUTOML_DURATION
+            )
+            monitor.start()
             tuner["model"].fit(full_data.X.to_numpy(), full_data.y.to_numpy())
             time.sleep(300)
             # tuner["model"].fit(augmented_data.X.to_numpy(), augmented_data.y.to_numpy())

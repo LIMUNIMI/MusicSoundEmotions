@@ -4,7 +4,7 @@ from . import validation
 from .utils import telegram_notify
 
 
-def full_experiment(obj, half=False):
+def full_experiment(obj: validation.Main, half=False):
     for p in S.RATIOS:
         obj._set_p(p)
         q = obj.splitter.q
