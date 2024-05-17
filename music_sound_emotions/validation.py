@@ -46,7 +46,8 @@ def _monitor_children_processes(min_time_limit, max_time_limit):
                             if remaining_time < 0:
                                 # kill with -9
                                 child.kill()
-                            child.wait(timeout=remaining_time)
+                            else:
+                                child.wait(timeout=remaining_time)
                         except psutil.TimeoutExpired:
                             # kill with -9
                             child.kill()
