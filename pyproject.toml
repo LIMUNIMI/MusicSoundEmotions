@@ -20,10 +20,17 @@ license = {text = "MIT"}
 
 
 [tool.pdm]
+
+[tool.pdm.options]
+add = ["--no-self"]
+install = ["--no-self"]
+sync = ["--no-self"]
+
 [tool.pdm.scripts]
 features = "python -m music_sound_emotions.features"
 tune_and_validate = "python -m music_sound_emotions.validation tune_and_validate"
 experiment = "python -m music_sound_emotions.experiments"
+parse = "python -m music_sound_emotions.parse_logs"
 # install_pip = "python -m ensurepip"
 # install_deps = "python -m pip install kaleido==0.2"
 # post_install = {composite = ["install_pip", "install_deps"]}

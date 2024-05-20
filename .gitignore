@@ -3,3 +3,6 @@
 telegram.json
 __pycache__
 .pdm.toml
+.pdm-python
+.python-version
+.python-version

@@ -1,49 +1,252 @@
-what is better? IADS-E no music, PMEmo, or IADS-E no music + PMEmo?
-Loading data
-Ratio: 1.0IADS-E-nomusic + 0.0PMEmo
-    Label: AroMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-20 19:23:37,618:Client-AutoML(8229):24bfd308-d01d-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.391926)
-[WARNING] [2024-02-20 19:23:37,618:Client-AutoML(8229):24bfd308-d01d-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-20 19:24:01,116:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2024-02-20 22:39:25,510:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/10', name: 6, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,512:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/12', name: 8, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,513:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/14', name: 10, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,514:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/16', name: 12, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,515:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/18', name: 14, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,516:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/20', name: 16, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,516:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/22', name: 18, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,517:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/24', name: 20, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,518:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/26', name: 22, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,519:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/4', name: 0, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,520:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/188962/9', name: 5, status: running, memory: 0, processing: 1>
-[WARNING] [2024-02-20 22:39:25,522:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/9'.
-[WARNING] [2024-02-20 22:39:26,746:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/10'.
-[WARNING] [2024-02-20 22:39:26,755:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/12'.
-[WARNING] [2024-02-20 22:39:26,756:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/14'.
-[WARNING] [2024-02-20 22:39:26,758:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/16'.
-[WARNING] [2024-02-20 22:39:26,759:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/18'.
-[WARNING] [2024-02-20 22:39:26,760:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/20'.
-[WARNING] [2024-02-20 22:39:26,761:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/22'.
-[WARNING] [2024-02-20 22:39:26,762:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/24'.
-[WARNING] [2024-02-20 22:39:26,763:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/26'.
-[ERROR] [2024-02-20 22:39:26,813:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/9'. Shutting down.
-[ERROR] [2024-02-20 22:39:26,819:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/10'. Shutting down.
-[ERROR] [2024-02-20 22:39:26,819:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/12'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,811:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/14'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,813:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/16'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,814:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/18'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,819:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/20'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,845:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/22'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,846:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/24'. Shutting down.
-[ERROR] [2024-02-20 22:39:27,847:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/26'. Shutting down.
-[WARNING] [2024-02-20 22:39:27,931:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/188962/4'.
-[ERROR] [2024-02-20 22:39:27,975:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/188962/4'. Shutting down.
-[ERROR] [2024-02-20 22:39:28,222:asyncio.events] 
+WHAT IS BETTER? IADS-E NO MUSIC, PMEmo, OR IADS-E NO MUSIC + PMEmo?
+2024-05-16 10:17:10: Loading data
+2024-05-16 10:17:25: Ratio: 1.0IADS-E-nomusic + 0.0PMEmo
+2024-05-16 10:17:25:     Label: AroMN
+2024-05-16 10:17:25:           [Clustering]
+2024-05-16 10:17:25:           [Ended]
+2024-05-16 10:17:25:           [Clustering]
+2024-05-16 10:17:26:           [Ended]
+2024-05-16 10:17:26:         Tuning AutoML
+[WARNING] [2024-05-16 10:31:58,593:Client-AutoML(8229):baf490ab-135c-11ef-99a5-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (32396.499407)
+[WARNING] [2024-05-16 10:31:58,593:Client-AutoML(8229):baf490ab-135c-11ef-99a5-b499bab8ef8a] Capping the per_run_time_limit to 16198.0 to have time for a least 2 models in each process.
+[WARNING] [2024-05-16 10:32:19,595:Client-EnsembleBuilder] No runs were available to build an ensemble from
+Needed time for optimizing the model:  33577.789382219315
+2024-05-16 19:37:04:             Cross-validating best estimator
+Needed time for cross-validating the best model:  10492.772372722626
+2024-05-16 22:32:57:             ___________________
+2024-05-16 22:32:57:             Obtained metrics for IADS-E-nomusic
+2024-05-16 22:32:57:                r2, RMSE, MAE
+2024-05-16 22:32:57:             5.93e-01 ± 3.77e-02
+2024-05-16 22:32:57:             1.70e-01 ± 8.22e-03
+2024-05-16 22:32:57:             1.35e-01 ± 4.81e-03
+2024-05-16 22:32:57:             ___________________
+2024-05-16 22:32:57:             Obtained metrics for PMEmo
+2024-05-16 22:32:57:                r2, RMSE, MAE
+2024-05-16 22:32:57:             3.99e-02 ± 5.90e-02
+2024-05-16 22:32:57:             3.46e-01 ± 1.93e-02
+2024-05-16 22:32:57:             2.51e-01 ± 2.44e-02
+2024-05-16 22:32:57:             
+2024-05-16 22:32:57:         Tuning Linear
+2024-05-16 22:33:25:             Total parameter sets: 400
+Needed time for optimizing the model:  802.9238929748535
+2024-05-16 22:46:20:             Cross-validating best estimator
+Needed time for cross-validating the best model:  23.823667764663696
+2024-05-16 22:47:44:             ___________________
+2024-05-16 22:47:44:             Obtained metrics for IADS-E-nomusic
+2024-05-16 22:47:44:                r2, RMSE, MAE
+2024-05-16 22:47:44:             1.73e-01 ± 1.65e-01
+2024-05-16 22:47:44:             2.42e-01 ± 2.63e-02
+2024-05-16 22:47:44:             1.94e-01 ± 2.60e-02
+2024-05-16 22:47:44:             ___________________
+2024-05-16 22:47:44:             Obtained metrics for PMEmo
+2024-05-16 22:47:44:                r2, RMSE, MAE
+2024-05-16 22:47:44:             -3.53e+01 ± 9.74e+01
+2024-05-16 22:47:44:             1.24e+00 ± 2.35e+00
+2024-05-16 22:47:44:             4.86e-01 ± 5.14e-01
+2024-05-16 22:47:44:             
+2024-05-16 22:47:44:         Tuning SVM
+2024-05-16 22:47:45:             Total parameter sets: 26000
+Needed time for optimizing the model:  10364.261245250702
+2024-05-17 01:40:28:             Cross-validating best estimator
+Needed time for cross-validating the best model:  11.31563663482666
+2024-05-17 01:41:39:             ___________________
+2024-05-17 01:41:39:             Obtained metrics for IADS-E-nomusic
+2024-05-17 01:41:39:                r2, RMSE, MAE
+2024-05-17 01:41:39:             4.93e-01 ± 6.66e-02
+2024-05-17 01:41:39:             1.90e-01 ± 1.29e-02
+2024-05-17 01:41:39:             1.49e-01 ± 9.12e-03
+2024-05-17 01:41:39:             ___________________
+2024-05-17 01:41:39:             Obtained metrics for PMEmo
+2024-05-17 01:41:39:                r2, RMSE, MAE
+2024-05-17 01:41:39:             1.28e-01 ± 4.07e-02
+2024-05-17 01:41:39:             3.30e-01 ± 1.72e-02
+2024-05-17 01:41:39:             2.50e-01 ± 1.99e-02
+2024-05-17 01:41:39:             
+--------
+2024-05-17 01:46:40:     Label: ValMN
+2024-05-17 01:46:40:           [Clustering]
+2024-05-17 01:46:40:           [Ended]
+2024-05-17 01:46:40:           [Clustering]
+2024-05-17 01:46:41:           [Ended]
+2024-05-17 01:46:41:         Tuning AutoML
+[WARNING] [2024-05-17 01:46:47,394:Client-AutoML(8229):8bac9c09-13de-11ef-99a5-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (32396.644543)
+[WARNING] [2024-05-17 01:46:47,394:Client-AutoML(8229):8bac9c09-13de-11ef-99a5-b499bab8ef8a] Capping the per_run_time_limit to 16198.0 to have time for a least 2 models in each process.
+[WARNING] [2024-05-17 01:47:19,827:Client-EnsembleBuilder] No models better than random - using Dummy losses!
+	Models besides current dummy model: 0
+	Dummy models: 1
+[WARNING] [2024-05-17 01:47:24,331:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 01:47:35,092:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 01:47:39,005:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 01:47:41,561:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 01:48:16,023:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 01:48:58,986:Client-EnsembleBuilder] No runs were available to build an ensemble from
+Needed time for optimizing the model:  32705.95339536667
+2024-05-17 10:51:47:             Cross-validating best estimator
+Needed time for cross-validating the best model:  4522.835837364197
+2024-05-17 12:08:10:             ___________________
+2024-05-17 12:08:10:             Obtained metrics for IADS-E-nomusic
+2024-05-17 12:08:10:                r2, RMSE, MAE
+2024-05-17 12:08:10:             3.83e-01 ± 5.49e-02
+2024-05-17 12:08:10:             2.30e-01 ± 1.58e-02
+2024-05-17 12:08:10:             1.78e-01 ± 1.32e-02
+2024-05-17 12:08:10:             ___________________
+2024-05-17 12:08:10:             Obtained metrics for PMEmo
+2024-05-17 12:08:10:                r2, RMSE, MAE
+2024-05-17 12:08:10:             -2.20e+00 ± 6.78e-01
+2024-05-17 12:08:10:             6.28e-01 ± 3.90e-02
+2024-05-17 12:08:10:             5.04e-01 ± 5.25e-02
+2024-05-17 12:08:10:             
+2024-05-17 12:08:10:         Tuning Linear
+2024-05-17 12:08:28:             Total parameter sets: 400
+Needed time for optimizing the model:  622.4687542915344
+2024-05-17 12:18:33:             Cross-validating best estimator
+Needed time for cross-validating the best model:  19.54104995727539
+2024-05-17 12:19:52:             ___________________
+2024-05-17 12:19:52:             Obtained metrics for IADS-E-nomusic
+2024-05-17 12:19:52:                r2, RMSE, MAE
+2024-05-17 12:19:52:             2.24e-01 ± 1.08e-01
+2024-05-17 12:19:52:             2.58e-01 ± 2.74e-02
+2024-05-17 12:19:52:             1.98e-01 ± 1.33e-02
+2024-05-17 12:19:52:             ___________________
+2024-05-17 12:19:52:             Obtained metrics for PMEmo
+2024-05-17 12:19:52:                r2, RMSE, MAE
+2024-05-17 12:19:52:             -8.62e+00 ± 5.12e+00
+2024-05-17 12:19:52:             1.07e+00 ± 2.82e-01
+2024-05-17 12:19:52:             8.08e-01 ± 1.57e-01
+2024-05-17 12:19:52:             
+2024-05-17 12:19:52:         Tuning SVM
+2024-05-17 12:19:53:             Total parameter sets: 26000
+Needed time for optimizing the model:  10415.626230716705
+2024-05-17 15:13:28:             Cross-validating best estimator
+Needed time for cross-validating the best model:  9.801364660263062
+2024-05-17 15:14:38:             ___________________
+2024-05-17 15:14:38:             Obtained metrics for IADS-E-nomusic
+2024-05-17 15:14:38:                r2, RMSE, MAE
+2024-05-17 15:14:38:             3.20e-01 ± 1.24e-01
+2024-05-17 15:14:38:             2.41e-01 ± 2.62e-02
+2024-05-17 15:14:38:             1.85e-01 ± 1.71e-02
+2024-05-17 15:14:38:             ___________________
+2024-05-17 15:14:38:             Obtained metrics for PMEmo
+2024-05-17 15:14:38:                r2, RMSE, MAE
+2024-05-17 15:14:38:             -1.56e+00 ± 4.17e-01
+2024-05-17 15:14:38:             5.63e-01 ± 2.55e-02
+2024-05-17 15:14:38:             4.51e-01 ± 3.58e-02
+2024-05-17 15:14:38:             
+--------
+--------
+2024-05-17 15:19:38: Ratio: 1.0IADS-E-nomusic + 1.0PMEmo
+2024-05-17 15:19:38:     Label: AroMN
+2024-05-17 15:20:04:           [Clustering]
+2024-05-17 15:20:04:           [Ended]
+2024-05-17 15:20:04:           [Clustering]
+2024-05-17 15:20:05:           [Ended]
+2024-05-17 15:20:05:         Tuning AutoML
+[WARNING] [2024-05-17 15:20:12,654:Client-AutoML(8229):2d1f2fda-1450-11ef-99a5-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (32395.882718)
+[WARNING] [2024-05-17 15:20:12,654:Client-AutoML(8229):2d1f2fda-1450-11ef-99a5-b499bab8ef8a] Capping the per_run_time_limit to 16197.0 to have time for a least 2 models in each process.
+[WARNING] [2024-05-17 15:20:35,219:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 15:20:49,955:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-17 15:20:52,950:Client-EnsembleBuilder] No runs were available to build an ensemble from
+Needed time for optimizing the model:  32709.261164426804
+2024-05-18 00:25:15:             Cross-validating best estimator
+Needed time for cross-validating the best model:  19518.90166759491
+2024-05-18 05:51:34:             ___________________
+2024-05-18 05:51:34:             Obtained metrics for IADS-E-nomusic
+2024-05-18 05:51:34:                r2, RMSE, MAE
+2024-05-18 05:51:34:             6.24e-01 ± 5.71e-02
+2024-05-18 05:51:34:             1.63e-01 ± 1.27e-02
+2024-05-18 05:51:34:             1.20e-01 ± 8.67e-03
+2024-05-18 05:51:34:             ___________________
+2024-05-18 05:51:34:             Obtained metrics for PMEmo
+2024-05-18 05:51:34:                r2, RMSE, MAE
+2024-05-18 05:51:34:             7.38e-01 ± 5.18e-02
+2024-05-18 05:51:34:             1.80e-01 ± 1.61e-02
+2024-05-18 05:51:34:             1.31e-01 ± 1.35e-02
+2024-05-18 05:51:34:             
+2024-05-18 05:51:34:         Tuning Linear
+2024-05-18 05:51:57:             Total parameter sets: 400
+Needed time for optimizing the model:  1338.5922572612762
+2024-05-18 06:13:52:             Cross-validating best estimator
+Needed time for cross-validating the best model:  66.80206394195557
+2024-05-18 06:15:59:             ___________________
+2024-05-18 06:15:59:             Obtained metrics for IADS-E-nomusic
+2024-05-18 06:15:59:                r2, RMSE, MAE
+2024-05-18 06:15:59:             4.38e-01 ± 8.40e-02
+2024-05-18 06:15:59:             1.99e-01 ± 1.59e-02
+2024-05-18 06:15:59:             1.55e-01 ± 1.66e-02
+2024-05-18 06:15:59:             ___________________
+2024-05-18 06:15:59:             Obtained metrics for PMEmo
+2024-05-18 06:15:59:                r2, RMSE, MAE
+2024-05-18 06:15:59:             6.50e-01 ± 4.10e-02
+2024-05-18 06:15:59:             2.09e-01 ± 1.25e-02
+2024-05-18 06:15:59:             1.57e-01 ± 8.22e-03
+2024-05-18 06:15:59:             
+2024-05-18 06:15:59:         Tuning SVM
+2024-05-18 06:15:59:             Total parameter sets: 26000
+Needed time for optimizing the model:  33302.33015990257
+2024-05-18 15:31:01:             Cross-validating best estimator
+Needed time for cross-validating the best model:  42.31851053237915
+2024-05-18 15:32:44:             ___________________
+2024-05-18 15:32:44:             Obtained metrics for IADS-E-nomusic
+2024-05-18 15:32:44:                r2, RMSE, MAE
+2024-05-18 15:32:44:             5.47e-01 ± 6.69e-02
+2024-05-18 15:32:44:             1.79e-01 ± 1.44e-02
+2024-05-18 15:32:44:             1.29e-01 ± 1.42e-02
+2024-05-18 15:32:44:             ___________________
+2024-05-18 15:32:44:             Obtained metrics for PMEmo
+2024-05-18 15:32:44:                r2, RMSE, MAE
+2024-05-18 15:32:44:             6.87e-01 ± 8.70e-02
+2024-05-18 15:32:44:             1.97e-01 ± 2.85e-02
+2024-05-18 15:32:44:             1.38e-01 ± 2.55e-02
+2024-05-18 15:32:44:             
+--------
+2024-05-18 15:37:44:     Label: ValMN
+2024-05-18 15:38:17:           [Clustering]
+2024-05-18 15:38:19:           [Ended]
+2024-05-18 15:38:19:           [Clustering]
+2024-05-18 15:38:20:           [Ended]
+2024-05-18 15:38:20:         Tuning AutoML
+[WARNING] [2024-05-18 15:38:28,569:Client-AutoML(8229):e40aca28-151b-11ef-99a5-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (32395.639116)
+[WARNING] [2024-05-18 15:38:28,570:Client-AutoML(8229):e40aca28-151b-11ef-99a5-b499bab8ef8a] Capping the per_run_time_limit to 16197.0 to have time for a least 2 models in each process.
+[WARNING] [2024-05-18 15:38:53,988:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-18 15:39:04,467:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-18 15:39:06,816:Client-EnsembleBuilder] No runs were available to build an ensemble from
+[WARNING] [2024-05-18 20:53:38,052:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/298', name: 0, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,266:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/300', name: 2, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,268:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/302', name: 4, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,269:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/304', name: 6, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,271:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/306', name: 8, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,272:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/308', name: 10, status: running, memory: 1, processing: 1>
+[WARNING] [2024-05-18 20:53:38,289:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/310', name: 12, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,291:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/312', name: 14, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,292:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/314', name: 16, status: running, memory: 0, processing: 2>
+[WARNING] [2024-05-18 20:53:38,294:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/316', name: 18, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,295:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/318', name: 20, status: running, memory: 0, processing: 1>
+[WARNING] [2024-05-18 20:53:38,296:distributed.scheduler] Worker failed to heartbeat within 300 seconds. Closing: <WorkerState 'inproc://159.149.133.152/39333/320', name: 22, status: running, memory: 0, processing: 2>
+[WARNING] [2024-05-18 20:53:38,301:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/298'.
+[WARNING] [2024-05-18 20:53:38,302:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/300'.
+[WARNING] [2024-05-18 20:53:38,304:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/302'.
+[WARNING] [2024-05-18 20:53:38,327:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/304'.
+[WARNING] [2024-05-18 20:53:38,329:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/306'.
+[WARNING] [2024-05-18 20:53:38,330:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/308'.
+[WARNING] [2024-05-18 20:53:38,332:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/310'.
+[WARNING] [2024-05-18 20:53:38,334:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/312'.
+[ERROR] [2024-05-18 20:53:38,428:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/298'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,576:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/300'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,578:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/302'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,603:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/304'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,605:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/306'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,606:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/308'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,607:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/310'. Shutting down.
+[ERROR] [2024-05-18 20:53:38,608:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/312'. Shutting down.
+[WARNING] [2024-05-18 20:53:38,618:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/314'.
+[WARNING] [2024-05-18 20:53:38,620:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/316'.
+[WARNING] [2024-05-18 20:53:38,621:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/318'.
+[WARNING] [2024-05-18 20:53:38,623:distributed.scheduler] Received heartbeat from unregistered worker 'inproc://159.149.133.152/39333/320'.
+[ERROR] [2024-05-18 20:53:39,201:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/314'. Shutting down.
+[ERROR] [2024-05-18 20:53:39,208:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/316'. Shutting down.
+[ERROR] [2024-05-18 20:53:39,264:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/318'. Shutting down.
+[ERROR] [2024-05-18 20:53:39,265:distributed.worker] Scheduler was unaware of this worker 'inproc://159.149.133.152/39333/320'. Shutting down.
+[ERROR] [2024-05-18 20:54:09,751:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -54,7 +257,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:39:28,239:asyncio.events] 
+[ERROR] [2024-05-18 20:54:39,541:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -65,7 +268,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:39:58,199:asyncio.events] 
+[ERROR] [2024-05-18 20:55:09,542:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -76,7 +279,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:40:28,203:asyncio.events] 
+[ERROR] [2024-05-18 20:55:39,542:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -87,7 +290,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:40:58,203:asyncio.events] 
+[ERROR] [2024-05-18 20:56:09,544:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -98,7 +301,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:41:28,203:asyncio.events] 
+[ERROR] [2024-05-18 20:56:39,547:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -109,7 +312,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:41:58,233:asyncio.events] 
+[ERROR] [2024-05-18 20:57:09,551:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -120,7 +323,7 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:42:28,226:asyncio.events] 
+[ERROR] [2024-05-18 20:57:39,553:asyncio.events] 
 Traceback (most recent call last):
   File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
     return await func(*args, **kwargs)
@@ -131,506 +334,3 @@ Traceback (most recent call last):
   File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
     await fut
 asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:42:58,233:asyncio.events] 
-Traceback (most recent call last):
-  File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
-    return await func(*args, **kwargs)
-  File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/worker.py", line 1498, in close
-    await self.finished()
-  File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/core.py", line 494, in finished
-    await self._event_finished.wait()
-  File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
-    await fut
-asyncio.exceptions.CancelledError
-[ERROR] [2024-02-20 22:43:28,256:asyncio.events] 
-Traceback (most recent call last):
-  File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/utils.py", line 741, in wrapper
-    return await func(*args, **kwargs)
-  File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/worker.py", line 1498, in close
-    await self.finished()
-  File "/home/fedes/MusicSoundEmotions/.venv/lib/python3.9/site-packages/distributed/core.py", line 494, in finished
-    await self._event_finished.wait()
-  File "/home/fedes/.pyenv/versions/3.9.16/lib/python3.9/asyncio/locks.py", line 226, in wait
-    await fut
-asyncio.exceptions.CancelledError
-Time:  21606.756916999817
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            5.85e-01 ± 4.16e-02
-            1.72e-01 ± 8.82e-03
-            1.35e-01 ± 4.66e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            6.67e-01 ± 9.62e-02
-            1.70e-01 ± 3.49e-02
-            8.22e-02 ± 1.90e-02
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  261.61111187934875
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            4.49e-01 ± 7.38e-02
-            1.98e-01 ± 1.36e-02
-            1.56e-01 ± 8.55e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            3.57e-01 ± 1.54e-01
-            2.36e-01 ± 3.63e-02
-            1.73e-01 ± 2.20e-02
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  20234.09748506546
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            4.96e-01 ± 5.18e-02
-            1.89e-01 ± 1.01e-02
-            1.47e-01 ± 8.32e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            6.07e-01 ± 7.92e-02
-            1.86e-01 ± 3.65e-02
-            9.44e-02 ± 2.32e-02
-            
---------
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-21 10:00:28,020:Client-AutoML(8229):0055055b-d097-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.697257)
-[WARNING] [2024-02-21 10:00:28,020:Client-AutoML(8229):0055055b-d097-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-21 10:00:51,487:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2024-02-21 10:01:00,100:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2024-02-21 10:01:02,073:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:01:03,853:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:01:05,780:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:01:10,463:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:01:19,920:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:01:44,947:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:02:06,211:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:03:10,588:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:03:34,731:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:03:57,468:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:04:27,052:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-[WARNING] [2024-02-21 10:05:31,767:Client-EnsembleBuilder] No models better than random - using Dummy losses!
-	Models besides current dummy model: 0
-	Dummy models: 1
-Time:  21881.924367904663
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            2.96e-01 ± 6.13e-02
-            2.46e-01 ± 1.44e-02
-            1.92e-01 ± 1.27e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            3.89e-01 ± 1.65e-01
-            2.53e-01 ± 4.09e-02
-            1.44e-01 ± 2.61e-02
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  443.0311758518219
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            2.21e-01 ± 9.35e-02
-            2.59e-01 ± 2.41e-02
-            2.00e-01 ± 1.40e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            -1.89e+00 ± 1.57e+00
-            5.36e-01 ± 1.13e-01
-            3.15e-01 ± 3.48e-02
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  20234.432955741882
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            2.13e-01 ± 3.91e-02
-            2.60e-01 ± 7.06e-03
-            2.04e-01 ± 7.65e-03
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            4.33e-01 ± 1.82e-01
-            2.43e-01 ± 4.10e-02
-            1.18e-01 ± 2.86e-02
-            
---------
---------
-Ratio: 1.0IADS-E-nomusic + 1.0PMEmo
-    Label: AroMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-21 22:35:26,845:Client-AutoML(8229):d5ee6b6e-d100-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.029390)
-[WARNING] [2024-02-21 22:35:26,845:Client-AutoML(8229):d5ee6b6e-d100-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-21 22:35:48,426:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  21763.793198108673
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            6.23e-01 ± 6.76e-02
-            1.63e-01 ± 1.56e-02
-            1.19e-01 ± 1.24e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            9.47e-01 ± 6.34e-03
-            6.78e-02 ± 8.51e-03
-            2.36e-02 ± 4.98e-03
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  948.2132904529572
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            4.41e-01 ± 1.09e-01
-            1.99e-01 ± 2.10e-02
-            1.55e-01 ± 1.71e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            7.00e-01 ± 6.73e-02
-            1.61e-01 ± 2.22e-02
-            1.25e-01 ± 1.30e-02
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  65700.84150099754
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            5.47e-01 ± 6.64e-02
-            1.79e-01 ± 1.43e-02
-            1.29e-01 ± 1.41e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            9.35e-01 ± 3.10e-02
-            7.34e-02 ± 2.07e-02
-            2.41e-02 ± 7.28e-03
-            
---------
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-23 01:37:18,062:Client-AutoML(8229):728ac4ff-d1e3-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.077369)
-[WARNING] [2024-02-23 01:37:18,062:Client-AutoML(8229):728ac4ff-d1e3-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-23 01:37:41,001:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2024-02-23 01:37:55,769:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  21715.961425304413
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            3.97e-01 ± 8.32e-02
-            2.27e-01 ± 1.84e-02
-            1.63e-01 ± 1.31e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            9.11e-01 ± 3.63e-02
-            9.55e-02 ± 1.65e-02
-            3.93e-02 ± 7.58e-03
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  825.6752395629883
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            1.81e-01 ± 7.57e-02
-            2.65e-01 ± 3.71e-03
-            2.02e-01 ± 1.24e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            5.55e-01 ± 9.12e-02
-            2.16e-01 ± 3.08e-02
-            1.69e-01 ± 2.67e-02
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  65680.26612472534
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            3.73e-01 ± 1.31e-01
-            2.31e-01 ± 2.32e-02
-            1.66e-01 ± 1.82e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            9.00e-01 ± 5.01e-02
-            1.01e-01 ± 1.94e-02
-            3.35e-02 ± 8.25e-03
-            
---------
---------
-Ratio: 1.0PMEmo + 0.0IADS-E-nomusic
-    Label: AroMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-24 03:51:53,363:Client-AutoML(8229):141fb477-d2bf-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.379221)
-[WARNING] [2024-02-24 03:51:53,363:Client-AutoML(8229):141fb477-d2bf-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-24 03:52:16,873:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  21864.611211299896
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            7.21e-01 ± 1.69e-02
-            1.95e-01 ± 3.99e-03
-            1.53e-01 ± 4.75e-03
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            8.30e-01 ± 4.02e-02
-            1.41e-01 ± 1.82e-02
-            7.66e-02 ± 1.20e-02
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  246.19906187057495
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            7.06e-01 ± 4.02e-02
-            2.00e-01 ± 1.18e-02
-            1.56e-01 ± 1.21e-02
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            -3.09e+04 ± 8.52e+04
-            3.05e+01 ± 7.46e+01
-            2.66e+00 ± 6.06e+00
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  20556.914566278458
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            6.64e-01 ± 1.53e-02
-            2.14e-01 ± 8.86e-03
-            1.68e-01 ± 7.42e-03
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            8.47e-01 ± 3.63e-02
-            1.33e-01 ± 1.40e-02
-            6.32e-02 ± 8.01e-03
-            
---------
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-24 16:57:41,724:Client-AutoML(8229):6e14b0b3-d32d-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.786473)
-[WARNING] [2024-02-24 16:57:41,724:Client-AutoML(8229):6e14b0b3-d32d-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-24 16:58:03,600:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  21605.32762145996
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            5.61e-01 ± 4.02e-02
-            2.14e-01 ± 1.86e-02
-            1.70e-01 ± 1.42e-02
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            7.17e-01 ± 2.66e-02
-            1.91e-01 ± 1.74e-02
-            9.72e-02 ± 1.23e-02
-            
-        Tuning Linear
-            Total parameter sets: 400
-Time:  261.34442257881165
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            5.26e-01 ± 5.59e-02
-            2.23e-01 ± 2.39e-02
-            1.77e-01 ± 1.81e-02
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            -1.84e+03 ± 4.58e+03
-            9.94e+00 ± 1.81e+01
-            1.04e+00 ± 1.49e+00
-            
-        Tuning SVM
-            Total parameter sets: 52000
-Time:  20598.807367801666
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            4.75e-01 ± 4.46e-02
-            2.34e-01 ± 1.78e-02
-            1.88e-01 ± 1.49e-02
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            6.95e-01 ± 4.78e-02
-            1.98e-01 ± 2.28e-02
-            9.20e-02 ± 1.62e-02
-            
---------
---------
-need to recompute for IADS with music for SOTA comparison
-Loading data
-Ratio: 1.0IADS-E + 0.0PMEmo
-    Label: AroMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-25 08:26:37,140:Client-AutoML(8229):32f93beb-d3af-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.379900)
-[WARNING] [2024-02-25 08:26:37,140:Client-AutoML(8229):32f93beb-d3af-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-25 08:27:00,132:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  21947.166900634766
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E
-               r2, RMSE, MAE
-            6.35e-01 ± 4.40e-02
-            1.77e-01 ± 1.46e-02
-            1.39e-01 ± 1.11e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            9.02e-01 ± 3.06e-02
-            9.51e-02 ± 2.04e-02
-            3.79e-02 ± 1.02e-02
-            
---------
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-25 17:50:55,887:Client-AutoML(8229):f48bc9db-d3fd-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (21596.381026)
-[WARNING] [2024-02-25 17:50:55,887:Client-AutoML(8229):f48bc9db-d3fd-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 10798.0 to have time for a least 2 models in each process.
-Time:  21677.295937538147
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for IADS-E
-               r2, RMSE, MAE
-            4.65e-01 ± 5.05e-02
-            2.59e-01 ± 1.66e-02
-            2.05e-01 ± 1.13e-02
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            8.46e-01 ± 2.64e-02
-            1.38e-01 ± 7.63e-03
-            5.08e-02 ± 5.48e-03
-            
---------
---------
-HOW MUCH OF EACH DATASET SHOULD WE ADD?
-Loading data
-Ratio: 1.0PMEmo + 0.0IADS-E-nomusic
-    Label: AroMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-26 03:33:45,100:Client-AutoML(8229):4752faf8-d44f-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (10796.611389)
-[WARNING] [2024-02-26 03:33:45,100:Client-AutoML(8229):4752faf8-d44f-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 5398.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-26 03:34:07,380:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  10888.031388759613
-            Cross-validating best estimator
-            ___________________
-            Obtained metrics for PMEmo
-               r2, RMSE, MAE
-            7.25e-01 ± 2.07e-02
-            1.93e-01 ± 6.11e-03
-            1.51e-01 ± 6.82e-03
-            ___________________
-            Obtained metrics for IADS-E-nomusic
-               r2, RMSE, MAE
-            7.44e-01 ± 6.81e-02
-            1.72e-01 ± 2.27e-02
-            8.95e-02 ± 1.33e-02
-            
---------
-    Label: ValMN
-          [Clustering]
-          [Ended]
-          [Clustering]
-          [Ended]
-        Tuning AutoML
-[WARNING] [2024-02-26 09:49:07,639:Client-AutoML(8229):d42d49c6-d483-11ee-a222-b499bab8ef8a] Time limit for a single run is higher than total time limit. Capping the limit for a single run to the total time given to SMAC (10796.388467)
-[WARNING] [2024-02-26 09:49:07,639:Client-AutoML(8229):d42d49c6-d483-11ee-a222-b499bab8ef8a] Capping the per_run_time_limit to 5398.0 to have time for a least 2 models in each process.
-[WARNING] [2024-02-26 09:49:29,800:Client-EnsembleBuilder] No runs were available to build an ensemble from
-[WARNING] [2024-02-26 09:49:40,830:Client-EnsembleBuilder] No runs were available to build an ensemble from
-Time:  10829.616521835327
-            Cross-validating best estimator
