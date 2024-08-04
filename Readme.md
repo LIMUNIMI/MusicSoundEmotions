@@ -1,4 +1,8 @@
-# Music and sound emotions
+# Joint Learning of Emotions in Music and Generalized Sounds
+> [!NOTE]
+> If you use our work in your research, cite us:
+> 
+> Simonetta F., Certo F., Ntalampiras S. "_Joint Learning of Emotions in Music and Generalized Sounds_", AudioMostly 2024, Milan, Italy. DOI: https://doi.org/10.1145/3678299.3678324
 
 ### Reproduce
 
